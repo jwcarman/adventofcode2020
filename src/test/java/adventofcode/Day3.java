@@ -17,46 +17,73 @@
 package adventofcode;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import adventofcode.io.Input;
+import adventofcode.toboggan.PathGenerator;
+import adventofcode.toboggan.Position;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readResource;
+import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class Day3 {
 
-    private static final String MAP = readResource("Day3.txt");
+    private static final String INPUT = readResource("Day3.txt");
+    private static final String EXAMPLE_INPUT = """
+            ..##.......
+            #...#...#..
+            .#....#..#.
+            ..#.#...#.#
+            .#...##..#.
+            ..#.##.....
+            .#.#.#....#
+            .#........#
+            #.##...#...
+            #...##....#
+            .#..#...#.#""";
+
 
     private static long countTrees(List<String> lines, int dx, int dy) {
-        final int maxX = lines.get(0).length();
-        int x = 0;
-        int y = 0;
-        long count = 0;
-        while (y < lines.size()) {
-            if (lines.get(y).charAt(x) == '#') {
-                count = count + 1;
-            }
-            y += dy;
-            x = (x + dx) % maxX;
-        }
-        return count;
+        final Stream<Position> positions = Stream.generate(new PathGenerator(dx, dy, lines.get(0).length()));
+
+        return positions.takeWhile(position -> position.getY() < lines.size())
+                .filter(position -> lines.get(position.getY()).charAt(position.getX()) == '#')
+                .count();
     }
 
     @Test
     void part1() {
-        final List<String> lines = Input.readLines(MAP);
+        final List<String> lines = Input.readLines(INPUT);
         System.out.println(countTrees(lines, 3, 1));
     }
 
     @Test
     void part2() {
-        final List<String> lines = Input.readLines(MAP);
-        System.out.println(
-                countTrees(lines, 1, 1) *
-                        countTrees(lines, 3, 1) *
-                        countTrees(lines, 5, 1) *
-                        countTrees(lines, 7, 1) *
-                        countTrees(lines, 1, 2)
-        );
+        final List<String> lines = Input.readLines(INPUT);
+        System.out.println(multiplySlopesPart2(lines));
+    }
+
+    @Test
+    void example1() {
+        final List<String> lines = Input.readLines(EXAMPLE_INPUT);
+        assertThat(countTrees(lines, 3, 1)).isEqualTo(7);
+    }
+
+    @Test
+    void example2() {
+        final List<String> lines = Input.readLines(EXAMPLE_INPUT);
+        final long total = multiplySlopesPart2(lines);
+        assertThat(total).isEqualTo(336);
+    }
+
+    private long multiplySlopesPart2(List<String> lines) {
+        return countTrees(lines, 1, 1) *
+                countTrees(lines, 3, 1) *
+                countTrees(lines, 5, 1) *
+                countTrees(lines, 7, 1) *
+                countTrees(lines, 1, 2);
     }
 }

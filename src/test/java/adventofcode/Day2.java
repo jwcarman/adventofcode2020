@@ -19,49 +19,70 @@ package adventofcode;
 import java.io.StringReader;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 import adventofcode.io.Input;
-import org.apache.commons.lang3.StringUtils;
+import adventofcode.password.PasswordPolicyLine;
 import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readResource;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day2 {
 
     private static final String INPUT = readResource("Day2.txt");
 
+    private static final String EXAMPLE_INPUT = """
+            1-3 a: abcde
+            1-3 b: cdefg
+            2-9 c: ccccccccc""";
+
     @Test
     void part1() {
         final List<String> lines = Input.readLines(new StringReader(INPUT));
+        final long count = countLines(lines, PasswordPolicyLine::isValidPart1);
 
-        final long count = lines.stream()
-                .filter(line -> {
-                    Scanner scanner = new Scanner(line);
-                    scanner.useDelimiter("-|:\\s|\\s+");
-                    final int min = scanner.nextInt();
-                    final int max = scanner.nextInt();
-                    final char letter = scanner.next().charAt(0);
-                    final String password = scanner.next();
-                    final int matches = StringUtils.countMatches(password, letter);
-                    return matches >= min && matches <= max;
-                }).count();
         System.out.println(count);
     }
 
     @Test
     void part2() {
         final List<String> lines = Input.readLines(new StringReader(INPUT));
+        final long count = countLines(lines, PasswordPolicyLine::isValidPart2);
 
-        final long count = lines.stream()
-                .filter(line -> {
-                    Scanner scanner = new Scanner(line);
-                    scanner.useDelimiter("-|:\\s|\\s+");
-                    final int index1 = scanner.nextInt() - 1;
-                    final int index2 = scanner.nextInt() - 1;
-                    final char letter = scanner.next().charAt(0);
-                    final String password = scanner.next();
-                    return password.charAt(index1) == letter ^ password.charAt(index2) == letter;
-                }).count();
         System.out.println(count);
     }
+
+    @Test
+    void example1() {
+        final List<String> lines = Input.readLines(new StringReader(EXAMPLE_INPUT));
+        final long count = countLines(lines, PasswordPolicyLine::isValidPart1);
+        assertThat(count).isEqualTo(2);
+    }
+
+    @Test
+    void example2() {
+        final List<String> lines = Input.readLines(new StringReader(EXAMPLE_INPUT));
+        final long count = countLines(lines, PasswordPolicyLine::isValidPart2);
+        assertThat(count).isEqualTo(1);
+    }
+
+    private long countLines(List<String> lines, Predicate<PasswordPolicyLine> predicate) {
+        return lines.stream()
+                .map(this::toPolicyLine)
+                .filter(predicate)
+                .count();
+    }
+
+    private PasswordPolicyLine toPolicyLine(String line) {
+        final Scanner scanner = new Scanner(line);
+        scanner.useDelimiter("-|:\\s|\\s+");
+        return PasswordPolicyLine.builder()
+                .first(scanner.nextInt())
+                .second(scanner.nextInt())
+                .letter(scanner.next().charAt(0))
+                .password(scanner.next())
+                .build();
+    }
+
 }

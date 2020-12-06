@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package adventofcode;
+package adventofcode.toboggan;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.util.function.Supplier;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import lombok.RequiredArgsConstructor;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+@RequiredArgsConstructor
+public class PathGenerator implements Supplier<Position> {
+    private final int dx;
+    private final int dy;
+    private final int maxX;
+    private int x = 0;
+    private int y = 0;
 
-@Target(FIELD)
-@Retention(RUNTIME)
-@Constraint(validatedBy = HeightValidator.class)
-public @interface Height {
-    String message() default "Invalid height";
-
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
+    @Override
+    public Position get() {
+        final Position position = new Position(x, y);
+        x = (x + dx) % maxX;
+        y += dy;
+        return position;
+    }
 }

@@ -28,12 +28,20 @@ import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readResource;
 import static com.google.common.collect.Sets.combinations;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class Day1 {
 
     private static final String INPUT = readResource("Day1.txt");
 
+    private static final String EXAMPLE_INPUT = """
+            1721
+            979
+            366
+            299
+            675
+            1456""";
 
     @Test
     void part1() {
@@ -45,6 +53,18 @@ public class Day1 {
     void part2() {
         final Set<Integer> numbers = new HashSet<>(Input.readLines(new StringReader(INPUT), Integer::parseInt));
         findSum2020AndMultiply(combinations(numbers, 3)).ifPresent(System.out::println);
+    }
+
+    @Test
+    void example1() {
+        final Set<Integer> numbers = new HashSet<>(Input.readLines(new StringReader(EXAMPLE_INPUT), Integer::parseInt));
+        assertThat(findSum2020AndMultiply(combinations(numbers, 2))).hasValue(514579);
+    }
+
+    @Test
+    void example2() {
+        final Set<Integer> numbers = new HashSet<>(Input.readLines(new StringReader(EXAMPLE_INPUT), Integer::parseInt));
+        assertThat(findSum2020AndMultiply(combinations(numbers, 3))).hasValue(241861950);
     }
 
     private Optional<Integer> findSum2020AndMultiply(Set<Set<Integer>> combinations) {

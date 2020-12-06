@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package adventofcode;
+package adventofcode.passport;
 
-import javax.validation.GroupSequence;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -24,9 +28,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
+import adventofcode.passport.validation.Height;
+import adventofcode.passport.validation.Part2Group;
+import adventofcode.passport.validation.Strict;
+import adventofcode.passport.validation.StrictPrimary;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 public class Passport {
 
     @NotNull
@@ -63,16 +73,25 @@ public class Passport {
 
     private String cid;
 
-    public interface Strict {
-
+    public boolean isValidPart1() {
+        return isValid(Default.class);
     }
 
-    public interface StrictPrimary {
-
+    public boolean isValidPart2() {
+        return isValid(Part2Group.class);
     }
 
-    @GroupSequence({Default.class, StrictPrimary.class, Strict.class})
-    public interface StrictGroup {
-
+    private boolean isValid(Class... groups) {
+        final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        final Set<ConstraintViolation<Passport>> errors = validator.validate(this, groups);
+        if (!errors.isEmpty()) {
+            log.info("Invalid Passport: {}", this);
+            errors.forEach(error -> {
+                log.info("{}: {}", error.getPropertyPath(), error.getMessage());
+            });
+            log.info("--------------------------------------------------");
+            return false;
+        }
+        return true;
     }
 }
