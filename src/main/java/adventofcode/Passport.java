@@ -54,6 +54,7 @@ public class Passport {
     public interface StrictPrimary {
 
     }
+
     @GroupSequence({Default.class, StrictPrimary.class, Strict.class})
     public interface StrictGroup {
 
