@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Day2 {
+public class Day2Test {
 
     private static final String INPUT = readResource("Day2.txt");
 

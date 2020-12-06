@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 
-public class Day6 {
+public class Day6Test {
 
     private static final String INPUT = readResource("Day6.txt");
 

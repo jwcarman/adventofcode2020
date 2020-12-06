@@ -29,7 +29,7 @@ import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-public class Day4 {
+public class Day4Test {
 
     private static final String INPUT = readResource("Day4.txt");
     private static final String EXAMPLE_INPUT1 = """

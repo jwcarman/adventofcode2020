@@ -31,7 +31,7 @@ import static com.google.common.collect.Sets.combinations;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class Day1 {
+public class Day1Test {
 
     private static final String INPUT = readResource("Day1.txt");
 
