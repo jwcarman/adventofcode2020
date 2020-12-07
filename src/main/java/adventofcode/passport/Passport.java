@@ -19,7 +19,7 @@ package adventofcode.passport;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.BiConsumer;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -47,7 +47,7 @@ public class Passport {
 
     public static List<Passport> parseFromInput(List<String> lines) {
         lines.add("");
-        return lines.stream().reduce(new LinkedList<>(), new Accumulator(), (left, right) -> null);
+        return lines.stream().collect(LinkedList::new, new Accumulator(), List::addAll);
     }
 
     @NotNull
@@ -106,19 +106,18 @@ public class Passport {
         return true;
     }
 
-    private static class Accumulator implements BiFunction<List<Passport>, String, List<Passport>> {
+    private static class Accumulator implements BiConsumer<List<Passport>, String> {
 
         private Passport passport = new Passport();
 
         @Override
-        public List<Passport> apply(List<Passport> passports, String line) {
+        public void accept(List<Passport> passports, String line) {
             if (StringUtils.isEmpty(line)) {
                 passports.add(passport);
                 passport = new Passport();
             } else {
                 copyPropertiesFromLine(passport, line);
             }
-            return passports;
         }
 
         private void copyPropertiesFromLine(Passport passport, String line) {

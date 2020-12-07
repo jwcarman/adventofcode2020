@@ -18,7 +18,7 @@ package adventofcode.customs;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BiConsumer;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -26,12 +26,13 @@ import com.google.common.collect.Multiset;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class PassengerGroup {
+
     private final Multiset<Integer> answers = HashMultiset.create(26);
     private int size = 0;
 
     public static List<PassengerGroup> parseFromInput(List<String> lines) {
         lines.add("");
-        return lines.stream().reduce(new LinkedList<>(), new Accumulator(), (left, right) -> null);
+        return lines.stream().collect(LinkedList::new, new Accumulator(), List::addAll);
     }
 
     public void addMemberAnswers(String memberAnswers) {
@@ -50,19 +51,18 @@ public class PassengerGroup {
                 .count();
     }
 
-    private static class Accumulator implements BiFunction<List<PassengerGroup>, String, List<PassengerGroup>> {
+    private static class Accumulator implements BiConsumer<List<PassengerGroup>, String> {
 
         private PassengerGroup currentGroup = new PassengerGroup();
 
         @Override
-        public List<PassengerGroup> apply(List<PassengerGroup> passengerGroups, String memberAnswers) {
+        public void accept(List<PassengerGroup> passengerGroups, String memberAnswers) {
             if (isEmpty(memberAnswers)) {
                 passengerGroups.add(currentGroup);
                 currentGroup = new PassengerGroup();
             } else {
                 currentGroup.addMemberAnswers(memberAnswers);
             }
-            return passengerGroups;
         }
     }
 }
