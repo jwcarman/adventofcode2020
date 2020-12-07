@@ -50,37 +50,35 @@ public class Day6Test {
 
     @Test
     void part1() {
-        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(INPUT));
-        final long sum = groups.stream()
+        log.info("Part One: {}", uniqueAnswersFromInput(INPUT));
+    }
+
+    private long uniqueAnswersFromInput(String input) {
+        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(input));
+        return groups.stream()
                 .mapToLong(PassengerGroup::calculateUniqueAnswers)
                 .sum();
-        log.info("Part One: {}", sum);
     }
 
     @Test
     void part2() {
-        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(INPUT));
-        final long sum = groups.stream()
+        log.info("Part Two: {}", unanimousAnswersFromInput(INPUT));
+    }
+
+    private long unanimousAnswersFromInput(String input) {
+        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(input));
+        return groups.stream()
                 .mapToLong(PassengerGroup::calculateUnanimousAnswers)
                 .sum();
-        log.info("Part Two: {}", sum);
     }
 
     @Test
     void example1() {
-        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(EXAMPLE_INPUT));
-        final long sum = groups.stream()
-                .mapToLong(PassengerGroup::calculateUniqueAnswers)
-                .sum();
-        assertThat(sum).isEqualTo(11);
+        assertThat(uniqueAnswersFromInput(EXAMPLE_INPUT)).isEqualTo(11);
     }
 
     @Test
     void example2() {
-        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(EXAMPLE_INPUT));
-        final long sum = groups.stream()
-                .mapToLong(PassengerGroup::calculateUnanimousAnswers)
-                .sum();
-        assertThat(sum).isEqualTo(6);
+        assertThat(unanimousAnswersFromInput(EXAMPLE_INPUT)).isEqualTo(6);
     }
 }
