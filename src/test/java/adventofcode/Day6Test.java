@@ -16,25 +16,22 @@
 
 package adventofcode;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
+import adventofcode.customs.PassengerGroup;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class Day6Test {
 
     private static final String INPUT = readResource("Day6.txt");
 
-    private static final String EXAMPLE = """
+    private static final String EXAMPLE_INPUT = """
             abc
                         
             a
@@ -53,44 +50,37 @@ public class Day6Test {
 
     @Test
     void part1() {
-        final Set<Integer> answers = new HashSet<>();
-        int count = 0;
-        final List<String> lines = readLines(INPUT);
-        lines.add("");
-        for (String line : lines) {
-            if (StringUtils.isEmpty(line)) {
-                count += answers.size();
-                answers.clear();
-            } else {
-                line.chars().forEach(answers::add);
-            }
-        }
-        log.info("Part One: {}", count);
-    }
-
-    private long countUnanimous(Multiset<Integer> answers,final int groupSize) {
-        return answers.elementSet().stream()
-                .filter(i -> answers.count(i) == groupSize)
-                .count();
+        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(INPUT));
+        final long sum = groups.stream()
+                .mapToLong(PassengerGroup::calculateUniqueAnswers)
+                .sum();
+        log.info("Part One: {}", sum);
     }
 
     @Test
     void part2() {
-        Multiset<Integer> answers = HashMultiset.create(26);
-        int groupSize = 0;
-        final List<String> lines = readLines(INPUT);
-        lines.add("");
-        int count = 0;
-        for (String line : lines) {
-            if (StringUtils.isEmpty(line)) {
-                count += countUnanimous(answers, groupSize);
-                answers.clear();
-                groupSize = 0;
-            } else {
-                line.chars().forEach(answers::add);
-                groupSize++;
-            }
-        }
-        log.info("Part Two: {}", count);
+        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(INPUT));
+        final long sum = groups.stream()
+                .mapToLong(PassengerGroup::calculateUnanimousAnswers)
+                .sum();
+        log.info("Part Two: {}", sum);
+    }
+
+    @Test
+    void example1() {
+        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(EXAMPLE_INPUT));
+        final long sum = groups.stream()
+                .mapToLong(PassengerGroup::calculateUniqueAnswers)
+                .sum();
+        assertThat(sum).isEqualTo(11);
+    }
+
+    @Test
+    void example2() {
+        final List<PassengerGroup> groups = PassengerGroup.parseFromInput(readLines(EXAMPLE_INPUT));
+        final long sum = groups.stream()
+                .mapToLong(PassengerGroup::calculateUnanimousAnswers)
+                .sum();
+        assertThat(sum).isEqualTo(6);
     }
 }

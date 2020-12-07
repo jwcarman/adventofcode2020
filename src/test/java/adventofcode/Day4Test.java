@@ -16,12 +16,10 @@
 
 package adventofcode;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.function.Predicate;
 
 import adventofcode.io.Input;
 import adventofcode.passport.Passport;
-import adventofcode.passport.PassportAccumulator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Day4Test {
 
     private static final String INPUT = readResource("Day4.txt");
+
     private static final String EXAMPLE_INPUT1 = """
             ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
             byr:1937 iyr:2017 cid:147 hgt:183cm
@@ -77,50 +76,29 @@ public class Day4Test {
 
     @Test
     void part1() {
-        final List<Passport> passports = parsePassports(INPUT);
-        final long count = passports.stream()
-                .filter(Passport::isValidPart1)
-                .count();
+        final long count = findPassports(INPUT, Passport::isValidPart1);
         log.info("Part One: {}", count);
     }
 
     @Test
     void part2() {
-        final List<Passport> passports = parsePassports(INPUT);
-        final long count = passports.stream()
-                .filter(Passport::isValidPart2)
-                .count();
+        final long count = findPassports(INPUT, Passport::isValidPart2);
         log.info("Part Two: {}", count);
     }
 
     @Test
     void example1() {
-        final List<Passport> passports = parsePassports(EXAMPLE_INPUT1);
-        final long count = passports.stream()
-                .filter(Passport::isValidPart1)
-                .count();
-
-        assertThat(count).isEqualTo(2);
-
+        assertThat(findPassports(EXAMPLE_INPUT1, Passport::isValidPart1)).isEqualTo(2);
     }
 
     @Test
     void example2() {
-        final List<Passport> passports = parsePassports(EXAMPLE_INPUT2);
-        final long count = passports.stream()
-                .filter(Passport::isValidPart2)
+        assertThat(findPassports(EXAMPLE_INPUT2, Passport::isValidPart2)).isEqualTo(4);
+    }
+
+    private long findPassports(String input, Predicate<Passport> predicate) {
+        return Passport.parseFromInput(Input.readLines(input)).stream()
+                .filter(predicate)
                 .count();
-
-        assertThat(count).isEqualTo(4);
-
     }
-
-    private List<Passport> parsePassports(String input) {
-        final List<String> lines = Input.readLines(input);
-        lines.add("");
-
-        return lines.stream().reduce(new LinkedList<>(), new PassportAccumulator(), (left, right) -> null);
-    }
-
-
 }

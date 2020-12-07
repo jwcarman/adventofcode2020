@@ -16,7 +16,10 @@
 
 package adventofcode.passport;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -28,16 +31,24 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.groups.Default;
 
+import adventofcode.io.InputException;
 import adventofcode.passport.validation.Height;
 import adventofcode.passport.validation.Part2Group;
 import adventofcode.passport.validation.Strict;
 import adventofcode.passport.validation.StrictPrimary;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 @Slf4j
 public class Passport {
+
+    public static List<Passport> parseFromInput(List<String> lines) {
+        lines.add("");
+        return lines.stream().reduce(new LinkedList<>(), new Accumulator(), (left, right) -> null);
+    }
 
     @NotNull
     @Min(value = 1920, groups = StrictPrimary.class)
@@ -93,5 +104,33 @@ public class Passport {
             return false;
         }
         return true;
+    }
+
+    private static class Accumulator implements BiFunction<List<Passport>, String, List<Passport>> {
+
+        private Passport passport = new Passport();
+
+        @Override
+        public List<Passport> apply(List<Passport> passports, String line) {
+            if (StringUtils.isEmpty(line)) {
+                passports.add(passport);
+                passport = new Passport();
+            } else {
+                copyPropertiesFromLine(passport, line);
+            }
+            return passports;
+        }
+
+        private void copyPropertiesFromLine(Passport passport, String line) {
+            final String[] splits = line.split("\\s+");
+            for (String split : splits) {
+                final String[] nameValue = split.split(":");
+                try {
+                    BeanUtils.setProperty(passport, nameValue[0], nameValue[1]);
+                } catch (ReflectiveOperationException e) {
+                    throw new InputException(e, "Unable to set Passport property '%s' to value '%s'.", nameValue[0], nameValue[1]);
+                }
+            }
+        }
     }
 }
