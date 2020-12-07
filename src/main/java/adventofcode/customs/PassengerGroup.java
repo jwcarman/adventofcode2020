@@ -46,8 +46,8 @@ public class PassengerGroup {
 
 
     public long calculateUnanimousAnswers() {
-        return answers.elementSet().stream()
-                .filter(i -> answers.count(i) == size)
+        return answers.entrySet().stream()
+                .filter(e -> e.getCount() == size)
                 .count();
     }
 
