@@ -22,12 +22,14 @@ import java.util.Set;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 
+@Slf4j
 public class Day6Test {
 
     private static final String INPUT = readResource("Day6.txt");
@@ -63,7 +65,7 @@ public class Day6Test {
                 line.chars().forEach(answers::add);
             }
         }
-        System.out.println(count);
+        log.info("Part One: {}", count);
     }
 
     private long countUnanimous(Multiset<Integer> answers,final int groupSize) {
@@ -89,6 +91,6 @@ public class Day6Test {
                 groupSize++;
             }
         }
-        System.out.println(count);
+        log.info("Part Two: {}", count);
     }
 }

@@ -23,11 +23,13 @@ import java.util.function.Predicate;
 
 import adventofcode.io.Input;
 import adventofcode.password.PasswordPolicyLine;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class Day2Test {
 
     private static final String INPUT = readResource("Day2.txt");
@@ -41,16 +43,14 @@ public class Day2Test {
     void part1() {
         final List<String> lines = Input.readLines(new StringReader(INPUT));
         final long count = countLines(lines, PasswordPolicyLine::isValidPart1);
-
-        System.out.println(count);
+        log.info("Part One: {}", count);
     }
 
     @Test
     void part2() {
         final List<String> lines = Input.readLines(new StringReader(INPUT));
         final long count = countLines(lines, PasswordPolicyLine::isValidPart2);
-
-        System.out.println(count);
+        log.info("Part Two: {}", count);
     }
 
     @Test

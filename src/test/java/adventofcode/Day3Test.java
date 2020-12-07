@@ -57,13 +57,13 @@ public class Day3Test {
     @Test
     void part1() {
         final List<String> lines = Input.readLines(INPUT);
-        System.out.println(countTrees(lines, 3, 1));
+        log.info("Part One: {}", countTrees(lines, 3, 1));
     }
 
     @Test
     void part2() {
         final List<String> lines = Input.readLines(INPUT);
-        System.out.println(multiplySlopesPart2(lines));
+        log.info("Part Two: {}", multiplySlopesPart2(lines));
     }
 
     @Test

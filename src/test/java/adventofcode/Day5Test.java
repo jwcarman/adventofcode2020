@@ -18,12 +18,14 @@ package adventofcode;
 
 import adventofcode.boarding.BoardingPass;
 import adventofcode.boarding.NextSeatIdPredicate;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class Day5Test {
 
     private static final String INPUT = readResource("Day5.txt");
@@ -35,12 +37,12 @@ public class Day5Test {
 
     @Test
     void part1() {
-        System.out.println(findMaxSeatId(INPUT));
+        log.info("Part One: {}", findMaxSeatId(INPUT));
     }
 
     @Test
     void part2() {
-        System.out.println(findMissingSeatId(INPUT));
+        log.info("Part Two: {}", findMissingSeatId(INPUT));
     }
 
     private Integer findMissingSeatId(String input) {

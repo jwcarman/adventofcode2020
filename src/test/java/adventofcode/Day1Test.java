@@ -18,12 +18,12 @@ package adventofcode;
 
 import java.io.StringReader;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import adventofcode.io.Input;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readResource;
@@ -31,6 +31,7 @@ import static com.google.common.collect.Sets.combinations;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+@Slf4j
 public class Day1Test {
 
     private static final String INPUT = readResource("Day1.txt");
@@ -46,32 +47,37 @@ public class Day1Test {
     @Test
     void part1() {
         final Set<Integer> numbers = new HashSet<>(Input.readLines(new StringReader(INPUT), Integer::parseInt));
-        findSum2020AndMultiply(combinations(numbers, 2)).ifPresent(System.out::println);
+        final int sum = findSum2020AndMultiply(combinations(numbers, 2));
+        log.info("Part One: {}", sum);
     }
 
     @Test
     void part2() {
         final Set<Integer> numbers = new HashSet<>(Input.readLines(new StringReader(INPUT), Integer::parseInt));
-        findSum2020AndMultiply(combinations(numbers, 3)).ifPresent(System.out::println);
+        final int sum = findSum2020AndMultiply(combinations(numbers, 3));
+        log.info("Part Two: {}", sum);
     }
 
     @Test
     void example1() {
         final Set<Integer> numbers = new HashSet<>(Input.readLines(new StringReader(EXAMPLE_INPUT), Integer::parseInt));
-        assertThat(findSum2020AndMultiply(combinations(numbers, 2))).hasValue(514579);
+        final int sum = findSum2020AndMultiply(combinations(numbers, 2));
+        assertThat(sum).isEqualTo(514579);
     }
 
     @Test
     void example2() {
         final Set<Integer> numbers = new HashSet<>(Input.readLines(new StringReader(EXAMPLE_INPUT), Integer::parseInt));
-        assertThat(findSum2020AndMultiply(combinations(numbers, 3))).hasValue(241861950);
+        final int sum = findSum2020AndMultiply(combinations(numbers, 3));
+        assertThat(sum).isEqualTo(241861950);
     }
 
-    private Optional<Integer> findSum2020AndMultiply(Set<Set<Integer>> combinations) {
+    private int findSum2020AndMultiply(Set<Set<Integer>> combinations) {
         return combinations.stream()
                 .filter(sumTo2020())
                 .findFirst()
-                .map(multiply());
+                .map(multiply())
+                .orElse(-1);
     }
 
     private Function<Set<Integer>, Integer> multiply() {

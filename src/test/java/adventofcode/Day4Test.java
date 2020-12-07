@@ -81,8 +81,7 @@ public class Day4Test {
         final long count = passports.stream()
                 .filter(Passport::isValidPart1)
                 .count();
-
-        System.out.println(count);
+        log.info("Part One: {}", count);
     }
 
     @Test
@@ -91,8 +90,7 @@ public class Day4Test {
         final long count = passports.stream()
                 .filter(Passport::isValidPart2)
                 .count();
-
-        System.out.println(count);
+        log.info("Part Two: {}", count);
     }
 
     @Test

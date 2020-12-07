@@ -19,11 +19,13 @@ package adventofcode;
 import adventofcode.io.Input;
 import adventofcode.luggage.LuggageNode;
 import adventofcode.luggage.LuggageTree;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class Day7Test {
 
     private static final String INPUT = readResource("Day7.txt");
@@ -44,7 +46,7 @@ public class Day7Test {
         final LuggageTree tree = parseTree(INPUT);
 
         final LuggageNode node = tree.getNode("shiny gold");
-        System.out.println(node.countOuterParents());
+        log.info("Part One: {}", node.countOuterParents());
     }
 
     @Test
@@ -52,7 +54,7 @@ public class Day7Test {
         final LuggageTree tree = parseTree(INPUT);
 
         final LuggageNode node = tree.getNode("shiny gold");
-        System.out.println(node.countDescendants());
+        log.info("Part Two: {}", node.countDescendants());
     }
 
     @Test

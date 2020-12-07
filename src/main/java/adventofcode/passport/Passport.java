@@ -85,11 +85,11 @@ public class Passport {
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         final Set<ConstraintViolation<Passport>> errors = validator.validate(this, groups);
         if (!errors.isEmpty()) {
-            log.info("Invalid Passport: {}", this);
+            log.debug("Invalid Passport: {}", this);
             errors.forEach(error -> {
-                log.info("{}: {}", error.getPropertyPath(), error.getMessage());
+                log.debug("{}: {}", error.getPropertyPath(), error.getMessage());
             });
-            log.info("--------------------------------------------------");
+            log.debug("--------------------------------------------------");
             return false;
         }
         return true;
