@@ -24,7 +24,8 @@ import java.util.regex.Pattern;
 
 public class LuggageTree {
 
-    final Pattern childPattern = Pattern.compile("(?<n>\\d+) (?<color>.+)");
+    private static final Pattern CHILD_PATTERN = Pattern.compile("(?<n>\\d+) (?<color>.+)");
+
     private final Map<String, LuggageNode> nodes = new HashMap<>();
 
     public LuggageNode getNode(final String color) {
@@ -46,7 +47,7 @@ public class LuggageTree {
         final LuggageNode parent = getNode(splits[0]);
         parent.setOuter(true);
         for (int i = 1; i < splits.length; ++i) {
-            final Matcher matcher = childPattern.matcher(splits[i].trim());
+            final Matcher matcher = CHILD_PATTERN.matcher(splits[i].trim());
             if (matcher.matches()) {
                 final int n = Integer.parseInt(matcher.group("n"));
                 final String color = matcher.group("color");
