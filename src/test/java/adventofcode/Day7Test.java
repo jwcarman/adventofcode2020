@@ -41,41 +41,35 @@ public class Day7Test {
             faded blue bags contain no other bags.
             dotted black bags contain no other bags.""";
 
+    private static final String SHINY_GOLD = "shiny gold";
+
     @Test
     void part1() {
-        final LuggageTree tree = parseTree(INPUT);
-
-        final LuggageNode node = tree.getNode("shiny gold");
+        final LuggageNode node = shinyGoldNode(INPUT);
         log.info("Part One: {}", node.countOuterParents());
     }
 
     @Test
     void part2() {
-        final LuggageTree tree = parseTree(INPUT);
-
-        final LuggageNode node = tree.getNode("shiny gold");
+        final LuggageNode node = shinyGoldNode(INPUT);
         log.info("Part Two: {}", node.countDescendants());
     }
 
     @Test
     void example1() {
-        final LuggageTree tree = parseTree(EXAMPLE_INPUT);
-
-        final LuggageNode node = tree.getNode("shiny gold");
+        final LuggageNode node = shinyGoldNode(EXAMPLE_INPUT);
         assertThat(node.countOuterParents()).isEqualTo(4);
     }
 
     @Test
     void example2() {
-        final LuggageTree tree = parseTree(EXAMPLE_INPUT);
-
-        final LuggageNode node = tree.getNode("shiny gold");
+        final LuggageNode node = shinyGoldNode(EXAMPLE_INPUT);
         assertThat(node.countDescendants()).isEqualTo(32);
     }
 
-    private LuggageTree parseTree(String input) {
+    private LuggageNode shinyGoldNode(String input) {
         final LuggageTree tree = new LuggageTree();
         Input.readLines(input).forEach(tree::addRule);
-        return tree;
+        return tree.getNode(SHINY_GOLD);
     }
 }
