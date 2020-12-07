@@ -42,7 +42,7 @@ public class LuggageNode {
 
     public int countOuterParents() {
         final HashSet<LuggageNode> parents = new HashSet<>();
-        collectOuterContainers(this, parents);
+        collectOuterParents(this, parents);
         return parents.size();
     }
 
@@ -50,9 +50,9 @@ public class LuggageNode {
         return children.size() + children.stream().mapToInt(LuggageNode::countDescendants).sum();
     }
 
-    private void collectOuterContainers(LuggageNode node, Set<LuggageNode> parents) {
+    private void collectOuterParents(LuggageNode node, Set<LuggageNode> parents) {
         node.getParents().stream()
-                .peek(c -> collectOuterContainers(c, parents))
+                .peek(c -> collectOuterParents(c, parents))
                 .filter(LuggageNode::isOuter)
                 .forEach(parents::add);
     }
