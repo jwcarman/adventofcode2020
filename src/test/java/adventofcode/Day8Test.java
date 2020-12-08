@@ -16,17 +16,10 @@
 
 package adventofcode;
 
-import java.util.List;
-import java.util.stream.Stream;
-
-import adventofcode.bootcode.BootCodeInterpreter;
-import adventofcode.bootcode.BootCodeResult;
-import adventofcode.bootcode.MutatedInstructionsGenerator;
+import adventofcode.bootcode.BootCodeGraph;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import static adventofcode.bootcode.BootCodeInterpreter.interpret;
-import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,37 +42,22 @@ public class Day8Test {
 
     @Test
     void part1() {
-        final BootCodeResult result = interpret(readLines(INPUT));
-        log.info("Part One: {}", result.getAccumulator());
+        log.info("Part One: {}", BootCodeGraph.accumulateToCycle(INPUT));
     }
 
     @Test
     void part2() {
-        final BootCodeResult result = findSuccessfulMutation(INPUT);
-        log.info("Part Two: {}", result.getAccumulator());
+        log.info("Part Two: {}", BootCodeGraph.accumulatePathToTerminus(INPUT));
     }
 
     @Test
     void example1() {
-        final BootCodeResult result = interpret(readLines(EXAMPLE_INPUT));
-        assertThat(result.getAccumulator()).isEqualTo(5);
+        assertThat(BootCodeGraph.accumulateToCycle(EXAMPLE_INPUT)).isEqualTo(5);
     }
 
     @Test
     void example2() {
-        final BootCodeResult bootCode = findSuccessfulMutation(EXAMPLE_INPUT);
-        assertThat(bootCode.getAccumulator()).isEqualTo(8);
+        assertThat(BootCodeGraph.accumulatePathToTerminus(EXAMPLE_INPUT)).isEqualTo(8);
     }
 
-    private BootCodeResult findSuccessfulMutation(String input) {
-        final List<String> original = readLines(input);
-        return Stream.generate(new MutatedInstructionsGenerator(original))
-                .map(BootCodeInterpreter::interpret)
-                .filter(BootCodeResult::isSuccessful)
-                .findFirst()
-                .orElseGet(() -> BootCodeResult.builder()
-                        .accumulator(0)
-                        .successful(false)
-                        .build());
-    }
 }

@@ -54,6 +54,7 @@
         <commons.math3.version>3.6.1</commons.math3.version>
         <guava.version>30.0-jre</guava.version>
         <hibernate.validator.version>6.1.6.Final</hibernate.validator.version>
+        <jgrapht.version>1.5.0</jgrapht.version>
         <junit.version>5.7.0</junit.version>
         <lombok.version>1.18.16</lombok.version>
         <slf4j.version>1.7.30</slf4j.version>
@@ -105,6 +106,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-core</artifactId>
+            <version>${jgrapht.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

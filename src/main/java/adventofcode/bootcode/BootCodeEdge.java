@@ -21,7 +21,9 @@ import lombok.Value;
 
 @Value
 @Builder
-public class BootCodeResult {
-    int accumulator;
-    boolean successful;
+public class BootCodeEdge {
+    int source;
+    int value;
+    String operation;
+    boolean mutation;
 }
