@@ -19,12 +19,12 @@ package adventofcode;
 import java.util.List;
 import java.util.stream.Stream;
 
-import adventofcode.io.Input;
 import adventofcode.toboggan.PathGenerator;
 import adventofcode.toboggan.Position;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Day3Test {
 
     private static final String INPUT = readResource("Day3.txt");
+
     private static final String EXAMPLE_INPUT = """
             ..##.......
             #...#...#..
@@ -46,6 +47,10 @@ public class Day3Test {
             .#..#...#.#""";
 
 
+    private static long countTrees(String input, int dx, int dy) {
+        return countTrees(readLines(input), dx, dy);
+    }
+
     private static long countTrees(List<String> lines, int dx, int dy) {
         final Stream<Position> positions = Stream.generate(new PathGenerator(dx, dy, lines.get(0).length()));
 
@@ -56,30 +61,27 @@ public class Day3Test {
 
     @Test
     void part1() {
-        final List<String> lines = Input.readLines(INPUT);
-        log.info("Part One: {}", countTrees(lines, 3, 1));
+        log.info("Part One: {}", countTrees(INPUT, 3, 1));
     }
 
     @Test
     void part2() {
-        final List<String> lines = Input.readLines(INPUT);
-        log.info("Part Two: {}", multiplySlopesPart2(lines));
+        log.info("Part Two: {}", multiplySlopesPart2(INPUT));
     }
 
     @Test
     void example1() {
-        final List<String> lines = Input.readLines(EXAMPLE_INPUT);
-        assertThat(countTrees(lines, 3, 1)).isEqualTo(7);
+        assertThat(countTrees(EXAMPLE_INPUT, 3, 1)).isEqualTo(7);
     }
 
     @Test
     void example2() {
-        final List<String> lines = Input.readLines(EXAMPLE_INPUT);
-        final long total = multiplySlopesPart2(lines);
+        final long total = multiplySlopesPart2(EXAMPLE_INPUT);
         assertThat(total).isEqualTo(336);
     }
 
-    private long multiplySlopesPart2(List<String> lines) {
+    private long multiplySlopesPart2(String input) {
+        final List<String> lines = readLines(input);
         return countTrees(lines, 1, 1) *
                 countTrees(lines, 3, 1) *
                 countTrees(lines, 5, 1) *
