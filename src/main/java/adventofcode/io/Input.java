@@ -49,6 +49,10 @@ public class Input {
         return readLines(new StringReader(input));
     }
 
+    public static <T> List<T> readLines(String input, Function<String, T> parser) {
+        return readLines(new StringReader(input), parser);
+    }
+
     public static <T> List<T> readLines(Reader stream, Function<String, T> parser) {
         return readLines(stream).stream().map(parser).collect(Collectors.toList());
     }
