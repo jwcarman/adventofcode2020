@@ -18,10 +18,8 @@ package adventofcode.passport;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.Max;
@@ -44,6 +42,8 @@ import org.apache.commons.lang3.StringUtils;
 @Data
 @Slf4j
 public class Passport {
+
+    private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
     public static List<Passport> parseFromInput(List<String> lines) {
         lines.add("");
@@ -92,18 +92,16 @@ public class Passport {
         return isValid(Part2Group.class);
     }
 
-    private boolean isValid(Class... groups) {
-        final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        final Set<ConstraintViolation<Passport>> errors = validator.validate(this, groups);
-        if (!errors.isEmpty()) {
-            log.debug("Invalid Passport: {}", this);
-            errors.forEach(error -> {
-                log.debug("{}: {}", error.getPropertyPath(), error.getMessage());
-            });
-            log.debug("--------------------------------------------------");
-            return false;
+    private boolean isValid(Class<?>... groups) {
+        return VALIDATOR.validate(this, groups).isEmpty();
+    }
+
+    private void setProperty(String name, String value) {
+        try {
+            BeanUtils.setProperty(this, name, value);
+        } catch (ReflectiveOperationException e) {
+            throw new InputException(e, "Unable to set Passport property '%s' to value '%s'.", name, value);
         }
-        return true;
     }
 
     private static class Accumulator implements BiConsumer<List<Passport>, String> {
@@ -121,14 +119,9 @@ public class Passport {
         }
 
         private void copyPropertiesFromLine(Passport passport, String line) {
-            final String[] splits = line.split("\\s+");
-            for (String split : splits) {
+            for (String split : line.split("\\s+")) {
                 final String[] nameValue = split.split(":");
-                try {
-                    BeanUtils.setProperty(passport, nameValue[0], nameValue[1]);
-                } catch (ReflectiveOperationException e) {
-                    throw new InputException(e, "Unable to set Passport property '%s' to value '%s'.", nameValue[0], nameValue[1]);
-                }
+                passport.setProperty(nameValue[0], nameValue[1]);
             }
         }
     }
