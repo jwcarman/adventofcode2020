@@ -16,10 +16,16 @@
 
 package adventofcode;
 
-import adventofcode.bootcode.BootCode;
+import java.util.List;
+import java.util.stream.Stream;
+
+import adventofcode.bootcode.BootCodeInterpreter;
+import adventofcode.bootcode.BootCodeResult;
+import adventofcode.bootcode.MutatedInstructionsGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import static adventofcode.bootcode.BootCodeInterpreter.interpret;
 import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,34 +49,37 @@ public class Day8Test {
 
     @Test
     void part1() {
-        final BootCode bootCode = new BootCode(readLines(INPUT));
-        log.info("Part One: {}", bootCode.getAccumulator());
+        final BootCodeResult result = interpret(readLines(INPUT));
+        log.info("Part One: {}", result.getAccumulator());
     }
 
     @Test
     void part2() {
-        final BootCode bootCode = findSuccessfulMutation(INPUT);
-        log.info("Part Two: {}", bootCode.getAccumulator());
+        final BootCodeResult result = findSuccessfulMutation(INPUT);
+        log.info("Part Two: {}", result.getAccumulator());
     }
 
     @Test
     void example1() {
-        final BootCode bootCode = new BootCode(readLines(EXAMPLE_INPUT));
-        assertThat(bootCode.getAccumulator()).isEqualTo(5);
+        final BootCodeResult result = interpret(readLines(EXAMPLE_INPUT));
+        assertThat(result.getAccumulator()).isEqualTo(5);
     }
 
     @Test
     void example2() {
-        final BootCode bootCode = findSuccessfulMutation(EXAMPLE_INPUT);
-
+        final BootCodeResult bootCode = findSuccessfulMutation(EXAMPLE_INPUT);
         assertThat(bootCode.getAccumulator()).isEqualTo(8);
     }
 
-    private BootCode findSuccessfulMutation(String input) {
-        BootCode bootCode = new BootCode(readLines(input));
-        return bootCode.mutations()
-                .filter(BootCode::completed)
+    private BootCodeResult findSuccessfulMutation(String input) {
+        final List<String> original = readLines(input);
+        return Stream.generate(new MutatedInstructionsGenerator(original))
+                .map(BootCodeInterpreter::interpret)
+                .filter(BootCodeResult::isSuccessful)
                 .findFirst()
-                .orElse(null);
+                .orElseGet(() -> BootCodeResult.builder()
+                        .accumulator(0)
+                        .successful(false)
+                        .build());
     }
 }
