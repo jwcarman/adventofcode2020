@@ -16,16 +16,15 @@
 
 package adventofcode;
 
-import java.io.StringReader;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
-import adventofcode.io.Input;
 import adventofcode.password.PasswordPolicyLine;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,33 +40,30 @@ public class Day2Test {
 
     @Test
     void part1() {
-        final List<String> lines = Input.readLines(new StringReader(INPUT));
-        final long count = countLines(lines, PasswordPolicyLine::isValidPart1);
+        final long count = countLines(INPUT, PasswordPolicyLine::isValidPart1);
         log.info("Part One: {}", count);
     }
 
     @Test
     void part2() {
-        final List<String> lines = Input.readLines(new StringReader(INPUT));
-        final long count = countLines(lines, PasswordPolicyLine::isValidPart2);
+        final long count = countLines(INPUT, PasswordPolicyLine::isValidPart2);
         log.info("Part Two: {}", count);
     }
 
     @Test
     void example1() {
-        final List<String> lines = Input.readLines(new StringReader(EXAMPLE_INPUT));
-        final long count = countLines(lines, PasswordPolicyLine::isValidPart1);
+        final long count = countLines(EXAMPLE_INPUT, PasswordPolicyLine::isValidPart1);
         assertThat(count).isEqualTo(2);
     }
 
     @Test
     void example2() {
-        final List<String> lines = Input.readLines(new StringReader(EXAMPLE_INPUT));
-        final long count = countLines(lines, PasswordPolicyLine::isValidPart2);
+        final long count = countLines(EXAMPLE_INPUT, PasswordPolicyLine::isValidPart2);
         assertThat(count).isEqualTo(1);
     }
 
-    private long countLines(List<String> lines, Predicate<PasswordPolicyLine> predicate) {
+    private long countLines(String input, Predicate<PasswordPolicyLine> predicate) {
+        final List<String> lines = readLines(input);
         return lines.stream()
                 .map(this::toPolicyLine)
                 .filter(predicate)
