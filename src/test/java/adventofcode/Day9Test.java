@@ -56,6 +56,14 @@ public class Day9Test {
             309
             576""";
 
+    /**
+     * Inspiration for this algorithm came
+     * from <a href="https://www.geeksforgeeks.org/find-subarray-with-given-sum/">GeeksforGeeks</a>
+     *
+     * @param numbers   the list of numbers
+     * @param targetSum the sum we're looking for (from first problem)
+     * @return the sum of the max/min of the sublist that sums to the target sum
+     */
     private static long findEncryptionWeakness(List<Long> numbers, long targetSum) {
         final int n = numbers.size();
         int start = 0;

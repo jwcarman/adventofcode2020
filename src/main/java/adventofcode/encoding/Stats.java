@@ -19,6 +19,10 @@ package adventofcode.encoding;
 import java.util.Deque;
 import java.util.LinkedList;
 
+/**
+ * Implementation of sliding window maximum/minimum inspired
+ * by <a href="https://www.nayuki.io/page/sliding-window-minimum-maximum-algorithm">Nayuki</a>.
+ */
 public class Stats {
     private long sum;
 
