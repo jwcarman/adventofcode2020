@@ -59,16 +59,16 @@ public class Day9Test {
     private static long findEncryptionWeakness(List<Long> numbers, long targetSum) {
         final int n = numbers.size();
         int start = 0;
-        long sum = numbers.get(0);
+        final Stats stats = new Stats();
+        stats.add(numbers.get(0));
         for (int end = 1; end < n; ++end) {
-            sum += numbers.get(end);
-            while (sum > targetSum && start < end - 1) {
-                sum -= numbers.get(start);
+            stats.add(numbers.get(end));
+            while (stats.getSum() > targetSum && start < end - 1) {
+                stats.remove(numbers.get(start));
                 start++;
             }
-            if (sum == targetSum) {
-                final Stats stats = new Stats(numbers.subList(start, end + 1));
-                return stats.getSmallest() + stats.getLargest();
+            if (stats.getSum() == targetSum) {
+                return stats.getMax() + stats.getMin();
             }
         }
         return -1L;
