@@ -58,16 +58,20 @@ public class Day9Test {
 
     private static long findEncryptionWeakness(List<Long> numbers, long targetSum) {
         final int n = numbers.size();
-        for (int i = 0; i < n; ++i) {
-            final Stats stats = new Stats(numbers.get(i));
-            for (int j = i + 1; j < n; ++j) {
-                stats.add(numbers.get(j));
-                if (stats.getSum() == targetSum) {
-                    return stats.getSmallest() + stats.getLargest();
-                }
+        int start = 0;
+        long sum = numbers.get(0);
+        for (int end = 1; end < n; ++end) {
+            sum += numbers.get(end);
+            while (sum > targetSum && start < end - 1) {
+                sum -= numbers.get(start);
+                start++;
+            }
+            if (sum == targetSum) {
+                final Stats stats = new Stats(numbers.subList(start, end + 1));
+                return stats.getSmallest() + stats.getLargest();
             }
         }
-        return -1;
+        return -1L;
     }
 
     private static long findFirstInvalid(String input, int bufferSize) {

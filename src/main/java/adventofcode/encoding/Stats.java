@@ -16,25 +16,19 @@
 
 package adventofcode.encoding;
 
+import java.util.List;
+
 public class Stats {
-    private long sum;
     private long smallest;
     private long largest;
 
-    public Stats(long first) {
-        this.sum = first;
-        this.smallest = first;
-        this.largest = first;
-    }
-
-    public void add(long n) {
-        sum += n;
-        smallest = Math.min(smallest, n);
-        largest = Math.max(largest, n);
-    }
-
-    public long getSum() {
-        return sum;
+    public Stats(List<Long> numbers) {
+        this.smallest = Long.MAX_VALUE;
+        this.largest = Long.MIN_VALUE;
+        numbers.forEach(n -> {
+            smallest = Math.min(smallest, n);
+            largest = Math.max(largest, n);
+        });
     }
 
     public long getSmallest() {
