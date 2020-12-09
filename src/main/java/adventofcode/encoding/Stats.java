@@ -19,10 +19,13 @@ package adventofcode.encoding;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Implementation of sliding window maximum/minimum inspired
  * by <a href="https://www.nayuki.io/page/sliding-window-minimum-maximum-algorithm">Nayuki</a>.
  */
+@Slf4j
 public class Stats {
     private long sum;
 
@@ -30,16 +33,23 @@ public class Stats {
     private Deque<Long> minimums = new LinkedList<>();
 
     public void add(long x) {
+        log.debug("Adding {} to maximums {}", x, maximums);
         while (!maximums.isEmpty() && maximums.getLast() < x) {
+            log.debug("Removing {}", maximums.getLast());
             maximums.removeLast();
         }
         maximums.addLast(x);
+        log.debug("Result  {}", maximums);
 
+        log.debug("Adding {} to minimums {}", x, minimums);
         while (!minimums.isEmpty() && minimums.getLast() > x) {
+            log.debug("Removing {}", minimums.getLast());
             minimums.removeLast();
         }
         minimums.addLast(x);
+        log.debug("Result  {}", minimums);
         sum += x;
+
     }
 
     public void remove(long x) {

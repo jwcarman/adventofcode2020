@@ -59,7 +59,7 @@
         <lombok.version>1.18.16</lombok.version>
         <slf4j.version>1.7.30</slf4j.version>
 
-
+        <surefire.runOrder>alphabetical</surefire.runOrder>
     </properties>
 
     <dependencyManagement>
