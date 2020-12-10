@@ -16,21 +16,16 @@
 
 package adventofcode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-import adventofcode.io.Input;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.junit.jupiter.api.Test;
 
+import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
+import static adventofcode.pointers.Pointers.threePointers;
+import static adventofcode.pointers.Pointers.twoPointers;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -50,44 +45,41 @@ public class Day1Test {
 
     @Test
     void part1() {
-        log.info("Part One: {}", findEntriesAndMultiply(INPUT, 2));
+        log.info("Part One: {}", twoPointersProduct(readLines(INPUT, Integer::parseInt), 2020));
     }
 
     @Test
     void part2() {
-        log.info("Part Two: {}", findEntriesAndMultiply(INPUT, 3));
+        log.info("Part Two: {}", threePointersProduct(readLines(INPUT, Integer::parseInt), 2020));
     }
 
     @Test
     void example1() {
-        assertThat(findEntriesAndMultiply(EXAMPLE_INPUT, 2)).isEqualTo(514579);
+        final List<Integer> unsorted = readLines(EXAMPLE_INPUT, Integer::parseInt);
+        assertThat(twoPointersProduct(unsorted, 2020)).isEqualTo(514579);
     }
 
     @Test
     void example2() {
-        assertThat(findEntriesAndMultiply(EXAMPLE_INPUT, 3)).isEqualTo(241861950);
+        final List<Integer> unsorted = readLines(EXAMPLE_INPUT, Integer::parseInt);
+        assertThat(threePointersProduct(unsorted, 2020)).isEqualTo(241861950);
     }
 
-    private <T> Stream<List<T>> combinationsOf(List<T> list, int k) {
-        final Spliterator<int[]> spliterator = Spliterators.spliteratorUnknownSize(CombinatoricsUtils.combinationsIterator(list.size(), k), Spliterator.ORDERED);
-        return StreamSupport.stream(spliterator, false)
-                .map(arr -> Arrays.stream(arr).mapToObj(list::get).collect(Collectors.toList()));
+    private Integer threePointersProduct(List<Integer> unsorted, int targetSum) {
+        final List<Integer> sorted = sort(unsorted);
+        return threePointers(sorted, targetSum)
+                .map(triple -> sorted.get(triple.getLeft()) * sorted.get(triple.getMiddle()) * sorted.get(triple.getRight()))
+                .orElse(-1);
     }
 
-    private long findEntriesAndMultiply(String input, int k) {
-        final List<Integer> numbers = new ArrayList<>(Input.readLines(input, Integer::parseInt));
-        return combinationsOf(numbers, k)
-                .filter(this::sumsUpTo2020)
-                .map(this::multiply)
-                .findFirst()
-                .orElse(-1L);
+    private Integer twoPointersProduct(List<Integer> unsorted, int targetSum) {
+        final List<Integer> sorted = sort(unsorted);
+        return twoPointers(sorted, targetSum)
+                .map(pair -> sorted.get(pair.getLeft()) * sorted.get(pair.getRight()))
+                .orElse(-1);
     }
 
-    private long multiply(List<Integer> combo) {
-        return combo.stream().reduce(1, (a, b) -> a * b);
-    }
-
-    private boolean sumsUpTo2020(List<Integer> combo) {
-        return combo.stream().mapToInt(i -> i).sum() == 2020;
+    private List<Integer> sort(List<Integer> unsorted) {
+        return unsorted.stream().sorted().collect(Collectors.toList());
     }
 }
