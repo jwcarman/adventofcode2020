@@ -16,8 +16,10 @@
 
 package adventofcode;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import adventofcode.boarding.BoardingPass;
-import adventofcode.boarding.NextSeatIdPredicate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -45,16 +47,7 @@ public class Day5Test {
         log.info("Part Two: {}", findMissingSeatId(INPUT));
     }
 
-    private Integer findMissingSeatId(String input) {
-        return readLines(input).stream()
-                .map(BoardingPass::new)
-                .map(BoardingPass::calculateSeatId)
-                .sorted()
-                .filter(new NextSeatIdPredicate())
-                .findFirst()
-                .map(seatId -> seatId - 1)
-                .orElse(-1);
-    }
+
 
     @Test
     void example1() {
@@ -69,5 +62,28 @@ public class Day5Test {
                 .orElse(-1);
     }
 
+    private Integer findMissingSeatId(String input) {
+        final List<Integer> seatIds = readLines(input).stream()
+                .map(BoardingPass::new)
+                .map(BoardingPass::calculateSeatId)
+                .sorted()
+                .collect(Collectors.toList());
+        return findMissingNumber(seatIds);
+    }
+
+    private int findMissingNumber(List<Integer> numbers) {
+        int head = 0;
+        int tail = numbers.size() - 1;
+        int mid = 0;
+        while (tail - head > 1) {
+            mid = (tail + head) / 2;
+            if (numbers.get(head) - head != numbers.get(mid) - mid) {
+                tail = mid;
+            } else if (numbers.get(tail) - tail != numbers.get(mid) - mid) {
+                head = mid;
+            }
+        }
+        return numbers.get(mid) + 1;
+    }
 
 }
