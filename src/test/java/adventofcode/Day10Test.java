@@ -19,9 +19,8 @@ package adventofcode;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import adventofcode.adapters.ContiguousBlockComboFunction;
-import adventofcode.adapters.ContiguousBlockSizeFunction;
-import adventofcode.adapters.JoltageDifferenceFunction;
+import adventofcode.joltage.JoltageDifferenceFunction;
+import adventofcode.joltage.JoltageGraph;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import lombok.extern.slf4j.Slf4j;
@@ -84,7 +83,6 @@ public class Day10Test {
         assertThat(calculatePart1Answer(EXAMPLE_INPUT)).isEqualTo(220);
     }
 
-
     @Test
     void example2() {
         assertThat(calculatePart2Answer(EXAMPLE_INPUT)).isEqualTo(19208);
@@ -96,11 +94,7 @@ public class Day10Test {
     }
 
     private Long calculatePart2Answer(String input) {
-        return calculateDifferences(input)
-                .stream()
-                .map(new ContiguousBlockSizeFunction())
-                .map(new ContiguousBlockComboFunction())
-                .reduce(1L, (a, b) -> a * b);
+        return new JoltageGraph(input).calculatePathCounts().get(0);
     }
 
     private List<Integer> calculateDifferences(String input) {
@@ -112,5 +106,4 @@ public class Day10Test {
         diffs.add(3);
         return diffs;
     }
-
 }

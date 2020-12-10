@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package adventofcode.adapters;
+package adventofcode.joltage;
 
 import java.util.function.Function;
 
-public class ContiguousBlockComboFunction implements Function<Integer, Long> {
-    @Override
-    public Long apply(Integer blockSize) {
-        return switch (blockSize) {
-            case 0, 1 -> 1L;
-            case 2 -> 2L;
-            case 3 -> 4L;
-            case 4 -> 7L;
-            default -> 13L;
-        };
+public class JoltageDifferenceFunction implements Function<Integer, Integer> {
+
+    int previous = 0;
+
+    public Integer apply(Integer integer) {
+        final int diff = integer - previous;
+        previous = integer;
+        return diff;
     }
 }
