@@ -48,28 +48,41 @@ public class JoltageGraph {
         final Map<Integer, Long> pathCounts = new HashMap<>();
         final Queue<Integer> joltageQueue = new LinkedList<>();
         final Set<Integer> queued = new HashSet<>();
-        joltageQueue.add(maximumJoltage);
-        queued.add(maximumJoltage);
+        enqueue(joltageQueue, queued, List.of(maximumJoltage));
         while (!joltageQueue.isEmpty()) {
             final int joltage = joltageQueue.remove();
             if (joltage == maximumJoltage) {
-                pathCounts.put(joltage, 1L);
+                addLeafPathCount(pathCounts, joltage);
             } else {
-                pathCounts.put(joltage, graph.outgoingEdgesOf(joltage).stream()
-                        .map(graph::getEdgeTarget)
-                        .sorted()
-                        .mapToLong(pathCounts::get)
-                        .sum());
+                addNonLeafPathCount(pathCounts, joltage);
             }
-            final List<Integer> parents = graph.incomingEdgesOf(joltage).stream()
-                    .map(graph::getEdgeSource)
-                    .filter(j -> !queued.contains(j))
-                    .sorted(Comparator.reverseOrder())
-                    .collect(Collectors.toList());
-            joltageQueue.addAll(parents);
-            queued.addAll(parents);
+            enqueue(joltageQueue, queued, unqueuedParentsOf(joltage, queued));
         }
         return pathCounts;
+    }
+
+    private void enqueue(Queue<Integer> joltageQueue, Set<Integer> queued, List<Integer> parents) {
+        joltageQueue.addAll(parents);
+        queued.addAll(parents);
+    }
+
+    private List<Integer> unqueuedParentsOf(int joltage, Set<Integer> queued) {
+        return graph.incomingEdgesOf(joltage).stream()
+                .map(graph::getEdgeSource)
+                .filter(j -> !queued.contains(j))
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
+    }
+
+    private void addNonLeafPathCount(Map<Integer, Long> pathCounts, int joltage) {
+        pathCounts.put(joltage, graph.outgoingEdgesOf(joltage).stream()
+                .map(graph::getEdgeTarget)
+                .mapToLong(pathCounts::get)
+                .sum());
+    }
+
+    private void addLeafPathCount(Map<Integer, Long> pathCounts, int joltage) {
+        pathCounts.put(joltage, 1L);
     }
 
     private Graph<Integer, String> buildGraph(List<Integer> joltages) {
