@@ -37,11 +37,16 @@ public class JoltageGraph {
     private final int maximumJoltage;
 
     public JoltageGraph(String input) {
+        final List<Integer> joltages = parseJoltages(input);
+        this.graph = buildGraph(joltages);
+        this.maximumJoltage = joltages.get(joltages.size() - 1);
+    }
+
+    public static List<Integer> parseJoltages(String input) {
         List<Integer> joltages = readLines(input, Integer::parseInt).stream().sorted().collect(Collectors.toList());
         joltages.add(0, 0);
-        this.maximumJoltage = joltages.get(joltages.size() - 1) + 3;
-        joltages.add(maximumJoltage);
-        this.graph = buildGraph(joltages);
+        joltages.add(joltages.get(joltages.size() - 1) + 3);
+        return joltages;
     }
 
     public Map<Integer, Long> calculatePathCounts() {

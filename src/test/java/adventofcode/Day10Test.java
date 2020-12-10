@@ -17,17 +17,15 @@
 package adventofcode;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import adventofcode.joltage.JoltageDifferenceFunction;
 import adventofcode.joltage.JoltageGraph;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
+import static adventofcode.joltage.JoltageGraph.parseJoltages;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -89,21 +87,16 @@ public class Day10Test {
     }
 
     private int calculatePart1Answer(String input) {
-        final Multiset<Integer> differenceCounts = HashMultiset.create(calculateDifferences(input));
-        return differenceCounts.count(1) * differenceCounts.count(3);
+        final List<Integer> joltages = parseJoltages(input);
+        final Multiset<Integer> differences = HashMultiset.create(joltages.size() - 1);
+        final int n = joltages.size();
+        for (int i = 0; i < n - 1; ++i) {
+            differences.add(joltages.get(i + 1) - joltages.get(i));
+        }
+        return differences.count(1) * differences.count(3);
     }
 
     private Long calculatePart2Answer(String input) {
         return new JoltageGraph(input).calculatePathCounts().get(0);
-    }
-
-    private List<Integer> calculateDifferences(String input) {
-        final List<Integer> diffs = readLines(input, Integer::parseInt)
-                .stream()
-                .sorted()
-                .map(new JoltageDifferenceFunction())
-                .collect(Collectors.toList());
-        diffs.add(3);
-        return diffs;
     }
 }
