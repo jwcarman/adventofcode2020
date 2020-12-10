@@ -45,36 +45,36 @@ public class Day1Test {
 
     @Test
     void part1() {
-        log.info("Part One: {}", twoPointersProduct(readLines(INPUT, Integer::parseInt), 2020));
+        log.info("Part One: {}", twoPointersProduct(readLines(INPUT, Integer::parseInt)));
     }
 
     @Test
     void part2() {
-        log.info("Part Two: {}", threePointersProduct(readLines(INPUT, Integer::parseInt), 2020));
+        log.info("Part Two: {}", threePointersProduct(readLines(INPUT, Integer::parseInt)));
     }
 
     @Test
     void example1() {
         final List<Integer> unsorted = readLines(EXAMPLE_INPUT, Integer::parseInt);
-        assertThat(twoPointersProduct(unsorted, 2020)).isEqualTo(514579);
+        assertThat(twoPointersProduct(unsorted)).isEqualTo(514579);
     }
 
     @Test
     void example2() {
         final List<Integer> unsorted = readLines(EXAMPLE_INPUT, Integer::parseInt);
-        assertThat(threePointersProduct(unsorted, 2020)).isEqualTo(241861950);
+        assertThat(threePointersProduct(unsorted)).isEqualTo(241861950);
     }
 
-    private Integer threePointersProduct(List<Integer> unsorted, int targetSum) {
+    private Integer threePointersProduct(List<Integer> unsorted) {
         final List<Integer> sorted = sort(unsorted);
-        return threePointers(sorted, targetSum)
+        return threePointers(sorted, 2020)
                 .map(triple -> sorted.get(triple.getLeft()) * sorted.get(triple.getMiddle()) * sorted.get(triple.getRight()))
                 .orElse(-1);
     }
 
-    private Integer twoPointersProduct(List<Integer> unsorted, int targetSum) {
+    private Integer twoPointersProduct(List<Integer> unsorted) {
         final List<Integer> sorted = sort(unsorted);
-        return twoPointers(sorted, targetSum)
+        return twoPointers(sorted, 2020)
                 .map(pair -> sorted.get(pair.getLeft()) * sorted.get(pair.getRight()))
                 .orElse(-1);
     }
