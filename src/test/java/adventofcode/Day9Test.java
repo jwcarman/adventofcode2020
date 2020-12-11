@@ -120,8 +120,7 @@ public class Day9Test {
         final List<Long> numbers = readLines(input, Long::parseLong);
 
         final long invalidNumber = findFirstInvalid(input, bufferSize);
-        final long weakness = findEncryptionWeakness(numbers, invalidNumber);
-        return weakness;
+        return findEncryptionWeakness(numbers, invalidNumber);
     }
 
 }

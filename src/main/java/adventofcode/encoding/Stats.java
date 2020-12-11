@@ -29,8 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 public class Stats {
     private long sum;
 
-    private Deque<Long> maximums = new LinkedList<>();
-    private Deque<Long> minimums = new LinkedList<>();
+    private final Deque<Long> maximums = new LinkedList<>();
+    private final Deque<Long> minimums = new LinkedList<>();
 
     public void add(long x) {
         log.debug("Adding {} to maximums {}", x, maximums);
