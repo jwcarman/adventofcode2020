@@ -18,6 +18,7 @@ package adventofcode.encoding;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.function.Predicate;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,33 +34,41 @@ public class Stats {
     private final Deque<Long> minimums = new LinkedList<>();
 
     public void add(long x) {
-        log.debug("Adding {} to maximums {}", x, maximums);
-        while (!maximums.isEmpty() && maximums.getLast() < x) {
-            log.debug("Removing {}", maximums.getLast());
-            maximums.removeLast();
-        }
-        maximums.addLast(x);
-        log.debug("Result  {}", maximums);
-
-        log.debug("Adding {} to minimums {}", x, minimums);
-        while (!minimums.isEmpty() && minimums.getLast() > x) {
-            log.debug("Removing {}", minimums.getLast());
-            minimums.removeLast();
-        }
-        minimums.addLast(x);
-        log.debug("Result  {}", minimums);
+        addToMaximums(x);
+        addToMinimums(x);
         sum += x;
+    }
 
+    private void addLast(Deque<Long> deque, long x, Predicate<Long> condition) {
+        while (!deque.isEmpty() && condition.test(deque.getLast())) {
+            log.debug("Removing {}", deque.getLast());
+            deque.removeLast();
+        }
+        deque.addLast(x);
+    }
+
+    private void addToMinimums(long x) {
+        log.debug("Adding {} to minimums {}", x, minimums);
+        addLast(minimums, x, last -> last > x);
+        log.debug("Result  {}", minimums);
+    }
+
+    private void addToMaximums(long x) {
+        log.debug("Adding {} to maximums {}", x, maximums);
+        addLast(maximums, x, last -> last < x);
+        log.debug("Result  {}", maximums);
     }
 
     public void remove(long x) {
-        if (maximums.getFirst() == x) {
-            maximums.removeFirst();
-        }
-        if (minimums.getFirst() == x) {
-            minimums.removeFirst();
-        }
+        removeIfFirst(maximums, x);
+        removeIfFirst(minimums, x);
         sum -= x;
+    }
+
+    private void removeIfFirst(Deque<Long> deque, long x) {
+        if (deque.getFirst() == x) {
+            deque.removeFirst();
+        }
     }
 
     public long getMax() {

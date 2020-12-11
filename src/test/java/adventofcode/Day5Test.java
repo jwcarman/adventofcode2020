@@ -77,13 +77,18 @@ public class Day5Test {
         int mid = 0;
         while (tail - head > 1) {
             mid = (tail + head) / 2;
-            if (numbers.get(head) - head != numbers.get(mid) - mid) {
+            final int midOffset = offsetOf(mid, numbers);
+            if (midOffset != offsetOf(head, numbers)) {
                 tail = mid;
-            } else if (numbers.get(tail) - tail != numbers.get(mid) - mid) {
+            } else if (midOffset != offsetOf(tail, numbers)) {
                 head = mid;
             }
         }
         return numbers.get(mid) + 1;
+    }
+
+    private int offsetOf(int index, List<Integer> numbers) {
+        return numbers.get(index) - index;
     }
 
 }
