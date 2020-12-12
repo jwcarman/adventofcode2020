@@ -39,19 +39,19 @@ public class Location {
     }
 
     void moveNorth(int value) {
-        moveTo(x, y + value);
+        translateBy(0, value);
     }
 
     void moveSouth(int value) {
-        moveTo(x, y - value);
+        translateBy(0, -value);
     }
 
     void moveEast(int value) {
-        moveTo(x + value, y);
+        translateBy(value, 0);
     }
 
     void moveWest(int value) {
-        moveTo(x - value, y);
+        translateBy(-value, 0);
     }
 
     private void moveTo(int newX, int newY) {
@@ -70,7 +70,6 @@ public class Location {
             case 180 -> moveTo(-x, -y);
             case 270 -> moveTo(y, -x);
         }
-        ;
     }
 
     void rotateRight(int degrees) {
@@ -79,7 +78,6 @@ public class Location {
             case 180 -> moveTo(-x, -y);
             case 270 -> moveTo(-y, x);
         }
-        ;
     }
 
     public int manhattanDistance() {
