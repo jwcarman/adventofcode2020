@@ -18,6 +18,7 @@ package adventofcode;
 
 import java.util.List;
 
+import adventofcode.navigation.NavigationInstructionInterpreter;
 import adventofcode.navigation.ShipInterpreter;
 import adventofcode.navigation.WaypointInterpreter;
 import lombok.extern.slf4j.Slf4j;
@@ -58,21 +59,17 @@ public class Day12Test {
         assertThat(calculateWaypointDistance(EXAMPLE_INPUT)).isEqualTo(286);
     }
 
-    private int calculateShipDistance(String input) {
+    private int calculateDistance(String input, NavigationInstructionInterpreter interpreter) {
         final List<String> instructions = readLines(input);
-        final ShipInterpreter interpreter = instructions.stream().reduce(new ShipInterpreter(), (inter, instruction) -> {
-            inter.processInstruction(instruction);
-            return inter;
-        }, (a, b) -> a);
+        instructions.forEach(interpreter::processInstruction);
         return interpreter.manhattanDistance();
     }
 
+    private int calculateShipDistance(String input) {
+        return calculateDistance(input, new ShipInterpreter());
+    }
+
     private int calculateWaypointDistance(String input) {
-        final List<String> instructions = readLines(input);
-        final WaypointInterpreter interpreter = instructions.stream().reduce(new WaypointInterpreter(), (inter, instruction) -> {
-            inter.processInstruction(instruction);
-            return inter;
-        }, (a, b) -> a);
-        return interpreter.manhattanDistance();
+        return calculateDistance(input, new WaypointInterpreter());
     }
 }
