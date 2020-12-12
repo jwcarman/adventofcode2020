@@ -26,7 +26,6 @@ import lombok.EqualsAndHashCode;
 public class Seat {
 
     public static final char EMPTY = 'L';
-    public static final char OCCUPIED = '#';
 
     private final int row;
     private final int col;
@@ -42,28 +41,25 @@ public class Seat {
         return neighbors;
     }
 
-    public boolean applyRules(char[][] oldState, char[][] newState, int maxNeighbors) {
+    public boolean applyRules(SeatState oldState, SeatState newState, int maxNeighbors) {
         final long neighborCount = occupiedNeighborCount(oldState);
 
-        switch (oldState[row][col]) {
-            case OCCUPIED -> {
-                if (neighborCount >= maxNeighbors) {
-                    newState[row][col] = EMPTY;
-                    return true;
-                }
+        if (isOccupied(oldState)) {
+            if (neighborCount >= maxNeighbors) {
+                newState.empty(row, col);
+                return true;
             }
-            case EMPTY -> {
-                if (neighborCount == 0) {
-                    newState[row][col] = OCCUPIED;
-                    return true;
-                }
+        } else {
+            if (neighborCount == 0) {
+                newState.occupy(row, col);
+                return true;
             }
         }
         return false;
     }
 
-    public boolean isOccupied(char[][] grid) {
-        return OCCUPIED == grid[row][col];
+    public boolean isOccupied(SeatState seatState) {
+        return seatState.isOccupied(row, col);
     }
 
     void linkDirectNeighbors(Table<Integer, Integer, Seat> table) {
@@ -108,9 +104,13 @@ public class Seat {
         }
     }
 
-    private long occupiedNeighborCount(char[][] grid) {
-        return neighbors.stream()
-                .filter(n -> n.isOccupied(grid))
-                .count();
+    private long occupiedNeighborCount(SeatState seatState) {
+        long count = 0;
+        for (Seat neighbor : neighbors) {
+            if (neighbor.isOccupied(seatState)) {
+                count++;
+            }
+        }
+        return count;
     }
 }

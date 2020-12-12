@@ -22,18 +22,24 @@ import java.util.List;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-public class SeatFactory {
+import static adventofcode.io.Input.readLines;
 
-    private final char[][] grid;
-    private final Table<Integer, Integer, Seat> table;
-    private final int height;
+public class SeatLayout {
+
+    private final List<String> rows;
     private final int width;
+    private final int height;
+    private Table<Integer, Integer, Seat> table;
 
-    public SeatFactory(char[][] grid) {
-        this.grid = grid;
-        this.height = grid.length;
-        this.width = grid[0].length;
+    public SeatLayout(String input) {
+        this.rows = readLines(input);
+        this.width = rows.get(0).length();
+        this.height = rows.size();
         this.table = HashBasedTable.create(height, width);
+    }
+
+    public SeatState createInitialState() {
+        return new BitSetSeatState(width, height);
     }
 
     private Seat getOrCreateSeat(int row, int col) {
@@ -65,7 +71,7 @@ public class SeatFactory {
         final List<Seat> seats = new LinkedList<>();
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                final char c = grid[row][col];
+                final char c = rows.get(row).charAt(col);
                 if (c == Seat.EMPTY) {
                     seats.add(getOrCreateSeat(row, col));
                 }
@@ -73,4 +79,5 @@ public class SeatFactory {
         }
         return seats;
     }
+
 }

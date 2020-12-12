@@ -16,18 +16,16 @@
 
 package adventofcode;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import adventofcode.ferry.Seat;
-import adventofcode.ferry.SeatFactory;
+import adventofcode.ferry.SeatLayout;
+import adventofcode.ferry.SeatState;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -73,54 +71,44 @@ public class Day11Test {
     }
 
     private long calculateAnswerPart1(String input) {
-        char[][] state = parseGrid(input);
-        final List<Seat> seats = new SeatFactory(state).createDirectNeighborSeats();
-        return calculateAnswer(state, seats, 4);
+        final SeatLayout layout = new SeatLayout(input);
+        final List<Seat> seats = layout.createDirectNeighborSeats();
+        return calculateAnswer(layout.createInitialState(), seats, 4);
     }
 
-    private long calculateAnswer(char[][] currentState, List<Seat> seats, int maxNeighbors) {
+    private long calculateAnswer(SeatState currentState, List<Seat> seats, int maxNeighbors) {
         Set<Seat> modifiable = new HashSet<>(seats);
         while (!modifiable.isEmpty()) {
-            final char[][] nextState = copy(currentState);
+            SeatState nextState = currentState.clone();
             modifiable = applyRules(modifiable, currentState, nextState, maxNeighbors);
             currentState = nextState;
         }
         return countOccupied(seats, currentState);
     }
 
-    private Set<Seat> applyRules(Set<Seat> modifiable, final char[][] oldState, final char[][] newState, final int maxNeighbors) {
-        return modifiable.stream()
-                .filter(seat -> seat.applyRules(oldState, newState, maxNeighbors))
-                .flatMap(seat -> seat.getNeighbors().stream())
-                .collect(Collectors.toSet());
+    private Set<Seat> applyRules(Set<Seat> modifiable, SeatState oldState, SeatState newState, final int maxNeighbors) {
+        final Set<Seat> modified = new HashSet<>();
+        for (Seat seat : modifiable) {
+            if (seat.applyRules(oldState, newState, maxNeighbors)) {
+                modified.add(seat);
+            }
+        }
+        return modified;
     }
 
     private long calculateAnswerPart2(String input) {
-        char[][] state = parseGrid(input);
-        final List<Seat> seats = new SeatFactory(state).createVisibleNeighborSeats();
-
-        return calculateAnswer(state, seats, 5);
+        final SeatLayout layout = new SeatLayout(input);
+        final List<Seat> seats = layout.createVisibleNeighborSeats();
+        return calculateAnswer(layout.createInitialState(), seats, 5);
     }
 
-    private long countOccupied(List<Seat> seats, final char[][] state) {
-        return seats.stream()
-                .filter(seat -> seat.isOccupied(state))
-                .count();
-    }
-
-    private char[][] copy(char[][] original) {
-        return Arrays.stream(original)
-                .map(char[]::clone)
-                .toArray(x -> original.clone());
-    }
-
-    private char[][] parseGrid(String input) {
-        final List<String> lines = readLines(input);
-        final char[][] grid = new char[lines.size()][];
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            grid[i] = line.toCharArray();
+    private long countOccupied(List<Seat> seats, SeatState state) {
+        long count = 0;
+        for (Seat seat : seats) {
+            if (seat.isOccupied(state)) {
+                count++;
+            }
         }
-        return grid;
+        return count;
     }
 }
