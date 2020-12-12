@@ -18,9 +18,8 @@ package adventofcode;
 
 import java.util.List;
 
-import adventofcode.navigation.NavigationInstructionInterpreter;
-import adventofcode.navigation.ShipInterpreter;
-import adventofcode.navigation.WaypointInterpreter;
+import adventofcode.navigation.Location;
+import adventofcode.navigation.NavigationInterpreter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -41,35 +40,41 @@ public class Day12Test {
 
     @Test
     void part1() {
-        log.info("Part One: {}", calculateShipDistance(INPUT));
+        log.info("Part One: {}", calculateDistancePart1(INPUT));
     }
 
     @Test
     void part2() {
-        log.info("Part Two: {}", calculateWaypointDistance(INPUT));
+        log.info("Part Two: {}", calculateDistancePart2(INPUT));
     }
 
     @Test
     void example1() {
-        assertThat(calculateShipDistance(EXAMPLE_INPUT)).isEqualTo(25);
+        assertThat(calculateDistancePart1(EXAMPLE_INPUT)).isEqualTo(25);
     }
 
     @Test
     void example2() {
-        assertThat(calculateWaypointDistance(EXAMPLE_INPUT)).isEqualTo(286);
+        assertThat(calculateDistancePart2(EXAMPLE_INPUT)).isEqualTo(286);
     }
 
-    private int calculateDistance(String input, NavigationInstructionInterpreter interpreter) {
+    private int calculateDistancePart1(String input) {
+        final Location shipLocation = Location.origin();
+        final Location waypointLocation = new Location(1, 0);
+        final NavigationInterpreter interpreter = new NavigationInterpreter(shipLocation, waypointLocation, shipLocation);
+        return calculateDistance(input, interpreter);
+    }
+
+    private int calculateDistancePart2(String input) {
+        final Location shipLocation = Location.origin();
+        final Location waypointLocation = new Location(10, 1);
+        final NavigationInterpreter interpreter = new NavigationInterpreter(shipLocation, waypointLocation, waypointLocation);
+        return calculateDistance(input, interpreter);
+    }
+
+    private int calculateDistance(String input, NavigationInterpreter interpreter) {
         final List<String> instructions = readLines(input);
         instructions.forEach(interpreter::processInstruction);
-        return interpreter.manhattanDistance();
-    }
-
-    private int calculateShipDistance(String input) {
-        return calculateDistance(input, new ShipInterpreter());
-    }
-
-    private int calculateWaypointDistance(String input) {
-        return calculateDistance(input, new WaypointInterpreter());
+        return interpreter.getShipLocation().manhattanDistance();
     }
 }
