@@ -16,22 +16,25 @@
 
 package adventofcode.navigation;
 
-public class ShipInterpreter extends NavigationInstructionInterpreter {
+public abstract class NavigationInstructionInterpreter {
+    protected int x = 0;
+    protected int y = 0;
+    protected Waypoint waypoint;
 
-    public ShipInterpreter() {
-        this.waypoint = new Waypoint(1, 0);
+    protected abstract void processInstruction(char action, int value);
+
+    public final void processInstruction(String instruction) {
+        final char action = instruction.charAt(0);
+        final int value = Integer.parseInt(instruction.substring(1));
+        processInstruction(action, value);
     }
 
-    @Override
-    protected void processInstruction(char action, int value) {
-        switch (action) {
-            case 'N' -> y += value;
-            case 'S' -> y -= value;
-            case 'E' -> x += value;
-            case 'W' -> x -= value;
-            case 'L' -> waypoint = waypoint.rotateLeft(value);
-            case 'R' -> waypoint = waypoint.rotateRight(value);
-            default -> moveToWaypoint(value);
-        }
+    protected void moveToWaypoint(int times) {
+        x += waypoint.getX() * times;
+        y += waypoint.getY() * times;
+    }
+
+    public int manhattanDistance() {
+        return Math.abs(x) + Math.abs(y);
     }
 }

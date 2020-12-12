@@ -16,16 +16,14 @@
 
 package adventofcode.navigation;
 
-public class WaypointInterpreter {
+public class WaypointInterpreter extends NavigationInstructionInterpreter {
 
-    private int x = 0;
-    private int y = 0;
-    private Waypoint waypoint = new Waypoint(10, 1);
+    public WaypointInterpreter() {
+        this.waypoint = new Waypoint(10, 1);
+    }
 
-    public void processInstruction(String instruction) {
-        final char action = instruction.charAt(0);
-        final int value = Integer.parseInt(instruction.substring(1));
-
+    @Override
+    protected void processInstruction(char action, int value) {
         switch (action) {
             case 'N' -> waypoint = waypoint.moveNorth(value);
             case 'S' -> waypoint = waypoint.moveSouth(value);
@@ -35,14 +33,5 @@ public class WaypointInterpreter {
             case 'R' -> waypoint = waypoint.rotateRight(value);
             default -> moveToWaypoint(value);
         }
-    }
-
-    private void moveToWaypoint(int times) {
-        x += waypoint.getX() * times;
-        y += waypoint.getY() * times;
-    }
-
-    public int manhattanDistance() {
-        return Math.abs(x) + Math.abs(y);
     }
 }
