@@ -23,10 +23,8 @@ public class BoardingPass {
     String seat;
 
     public int calculateSeatId() {
-        final String rowSpec = seat.substring(0, 7);
-        final String colSpec = seat.substring(7);
-        final int rowNumber = toInt(rowSpec, 'F', 'B');
-        final int colNumber = toInt(colSpec, 'L', 'R');
+        final int rowNumber = toInt(seat.substring(0, 7), 'F', 'B');
+        final int colNumber = toInt(seat.substring(7), 'L', 'R');
         return rowNumber * 8 + colNumber;
     }
 
