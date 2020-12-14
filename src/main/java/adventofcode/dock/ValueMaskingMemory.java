@@ -16,7 +16,7 @@
 
 package adventofcode.dock;
 
-public class ValueMaskingMemory extends AbstractMemory {
+public class ValueMaskingMemory extends BaseMemory {
 
     private String mask = fillMask('X');
 

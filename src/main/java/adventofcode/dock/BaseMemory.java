@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-abstract class AbstractMemory implements Memory {
+abstract class BaseMemory implements Memory {
 
     protected static final int MASK_SIZE = 36;
 

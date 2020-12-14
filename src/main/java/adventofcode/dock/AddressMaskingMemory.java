@@ -19,7 +19,7 @@ package adventofcode.dock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressMaskingMemory extends AbstractMemory {
+public class AddressMaskingMemory extends BaseMemory {
 
     private String mask = fillMask('0');
 
@@ -30,12 +30,11 @@ public class AddressMaskingMemory extends AbstractMemory {
 
     @Override
     public void writeValue(long address, long value) {
-        final String binary = binaryStringOf(address);
         final List<String> addresses = new ArrayList<>();
         addresses.add("");
-        applyMask(binary, addresses);
+        applyMask(binaryStringOf(address), addresses);
         addresses.stream()
-                .mapToLong(AbstractMemory::parseBinary)
+                .mapToLong(BaseMemory::parseBinary)
                 .forEach(a -> writeToAddress(a, value));
     }
 
@@ -57,8 +56,7 @@ public class AddressMaskingMemory extends AbstractMemory {
 
     private void appendToAddresses(List<String> addresses, char c) {
         for (int i = 0; i < addresses.size(); i++) {
-            String address = addresses.get(i);
-            addresses.set(i, address + c);
+            addresses.set(i, addresses.get(i) + c);
         }
     }
 }
