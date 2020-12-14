@@ -57,6 +57,7 @@
         <jgrapht.version>1.5.0</jgrapht.version>
         <junit.version>5.7.0</junit.version>
         <lombok.version>1.18.16</lombok.version>
+        <protonpack.version>1.16</protonpack.version>
         <slf4j.version>1.7.30</slf4j.version>
 
         <surefire.runOrder>alphabetical</surefire.runOrder>
@@ -106,6 +107,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codepoetics</groupId>
+            <artifactId>protonpack</artifactId>
+            <version>${protonpack.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jgrapht</groupId>
