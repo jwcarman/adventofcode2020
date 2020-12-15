@@ -18,39 +18,42 @@ package adventofcode.dock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class AddressMaskingMemoryController extends BaseMemoryController {
 
-    private String mask = fillMask('0');
+    private Long orMask = 0L;
+    private List<Long> xorMasks;
 
     @Override
     public void setMask(String mask) {
-        this.mask = mask;
+        this.orMask = parseBinary(mask.replace('X', '0'));
+        List<String> maskStrings = new ArrayList<>();
+        maskStrings.add("");
+        for (int i = 0; i < mask.length(); ++i) {
+            final char character = mask.charAt(i);
+            if (character == 'X') {
+                final List<String> copy = new ArrayList<>(maskStrings);
+                appendToAddresses(maskStrings, '0');
+                appendToAddresses(copy, '1');
+                maskStrings.addAll(copy);
+            } else {
+                appendToAddresses(maskStrings, '0');
+            }
+        }
+        xorMasks = maskStrings.stream()
+                .map(BaseMemoryController::parseBinary)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void writeValue(long address, long value) {
-        final List<String> addresses = new ArrayList<>();
-        addresses.add("");
-        applyMask(binaryStringOf(address), addresses);
-        addresses.stream()
-                .mapToLong(BaseMemoryController::parseBinary)
-                .forEach(a -> writeToAddress(a, value));
-    }
-
-    private void applyMask(String binary, List<String> addresses) {
-        for (int i = 0; i < MASK_SIZE; ++i) {
-            final char maskChar = mask.charAt(i);
-            switch (maskChar) {
-                case '1' -> appendToAddresses(addresses, '1');
-                case '0' -> appendToAddresses(addresses, binary.charAt(i));
-                default -> {
-                    final List<String> copy = new ArrayList<>(addresses);
-                    appendToAddresses(addresses, '0');
-                    appendToAddresses(copy, '1');
-                    addresses.addAll(copy);
-                }
-            }
+        final long anded = address | orMask;
+        for (Long xorMask : xorMasks) {
+            writeToAddress(xorMask ^ anded, value);
         }
     }
 

@@ -16,24 +16,23 @@
 
 package adventofcode.dock;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ValueMaskingMemoryController extends BaseMemoryController {
 
-    private String mask = fillMask('X');
+    private long andMask = 0L;
+    private long orMask = 0L;
+
 
     @Override
     public void setMask(String mask) {
-        this.mask = mask;
+        orMask = parseBinary(mask.replace('X', '0'));
+        andMask = parseBinary(mask.replace('X', '1'));
     }
 
     @Override
     public void writeValue(long address, long value) {
-        final StringBuilder binary = new StringBuilder(binaryStringOf(value));
-        for (int i = 0; i < 36; ++i) {
-            final char maskChar = mask.charAt(i);
-            if (maskChar != 'X') {
-                binary.setCharAt(i, maskChar);
-            }
-        }
-        writeToAddress(address, parseBinary(binary));
+        writeToAddress(address, (value & andMask) | orMask);
     }
 }
