@@ -16,12 +16,24 @@
 
 package adventofcode.dock;
 
-public interface Memory {
-    void setMask(String mask);
+public class ValueMaskingMemoryController extends BaseMemoryController {
 
-    void writeValue(long address, long value);
+    private String mask = fillMask('X');
 
-    long sumOfMemoryValues();
+    @Override
+    public void setMask(String mask) {
+        this.mask = mask;
+    }
 
-    long readValue(long address);
+    @Override
+    public void writeValue(long address, long value) {
+        final StringBuilder binary = new StringBuilder(binaryStringOf(value));
+        for (int i = 0; i < 36; ++i) {
+            final char maskChar = mask.charAt(i);
+            if (maskChar != 'X') {
+                binary.setCharAt(i, maskChar);
+            }
+        }
+        writeToAddress(address, parseBinary(binary));
+    }
 }

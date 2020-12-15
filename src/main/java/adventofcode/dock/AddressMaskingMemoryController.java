@@ -19,7 +19,7 @@ package adventofcode.dock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressMaskingMemory extends BaseMemory {
+public class AddressMaskingMemoryController extends BaseMemoryController {
 
     private String mask = fillMask('0');
 
@@ -34,7 +34,7 @@ public class AddressMaskingMemory extends BaseMemory {
         addresses.add("");
         applyMask(binaryStringOf(address), addresses);
         addresses.stream()
-                .mapToLong(BaseMemory::parseBinary)
+                .mapToLong(BaseMemoryController::parseBinary)
                 .forEach(a -> writeToAddress(a, value));
     }
 

@@ -21,7 +21,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-abstract class BaseMemory implements Memory {
+abstract class BaseMemoryController implements MemoryController {
 
     protected static final int MASK_SIZE = 36;
 

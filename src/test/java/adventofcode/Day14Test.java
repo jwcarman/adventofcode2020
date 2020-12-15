@@ -18,9 +18,9 @@ package adventofcode;
 
 import java.util.List;
 
-import adventofcode.dock.AddressMaskingMemory;
-import adventofcode.dock.Memory;
-import adventofcode.dock.ValueMaskingMemory;
+import adventofcode.dock.AddressMaskingMemoryController;
+import adventofcode.dock.MemoryController;
+import adventofcode.dock.ValueMaskingMemoryController;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -67,25 +67,25 @@ public class Day14Test {
     }
 
     private long calculateAnswerPart1(String input) {
-        return calculateAnswer(input, new ValueMaskingMemory());
+        return calculateAnswer(input, new ValueMaskingMemoryController());
     }
 
     private long calculateAnswerPart2(String input) {
-        return calculateAnswer(input, new AddressMaskingMemory());
+        return calculateAnswer(input, new AddressMaskingMemoryController());
     }
 
-    private long calculateAnswer(String input, Memory memory) {
+    private long calculateAnswer(String input, MemoryController memoryController) {
         final List<String> lines = readLines(input);
         for (String line : lines) {
             if (line.startsWith("mem")) {
                 final int ndx = line.indexOf(']');
                 final long address = Long.parseUnsignedLong(line.substring(4, ndx));
                 final long value = Long.parseUnsignedLong(line.substring(line.indexOf('=') + 2));
-                memory.writeValue(address, value);
+                memoryController.writeValue(address, value);
             } else {
-                memory.setMask(line.substring(7));
+                memoryController.setMask(line.substring(7));
             }
         }
-        return memory.sumOfMemoryValues();
+        return memoryController.sumOfMemoryValues();
     }
 }
