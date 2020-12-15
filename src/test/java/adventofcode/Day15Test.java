@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import adventofcode.recitation.RecitationGame;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -31,25 +32,27 @@ public class Day15Test {
 
     private static final String INPUT = readResource("Day15.txt");
     private static final String EXAMPLE_INPUT = "0,3,6";
+    public static final int PART_1_LIMIT = 2020;
+    public static final int PART_2_LIMIT = 30000000;
 
     @Test
     void part1() {
-        log.info("Part One: {}", findNthNumber(INPUT, 2020));
+        log.info("Part One: {}", findNthNumber(INPUT, PART_1_LIMIT));
     }
 
     @Test
     void part2() {
-        log.info("Part Two: {}", findNthNumber(INPUT, 30000000));
+        log.info("Part Two: {}", findNthNumber(INPUT, PART_2_LIMIT));
     }
 
     @Test
     void example1() {
-        assertThat(findNthNumber(EXAMPLE_INPUT, 2020)).isEqualTo(436);
+        assertThat(findNthNumber(EXAMPLE_INPUT, PART_1_LIMIT)).isEqualTo(436);
     }
 
     @Test
     void example2() {
-        assertThat(findNthNumber(EXAMPLE_INPUT, 30000000)).isEqualTo(175594);
+        assertThat(findNthNumber(EXAMPLE_INPUT, PART_2_LIMIT)).isEqualTo(175594);
     }
 
     private List<Integer> parseStartingNumbers(String input) {
@@ -59,35 +62,6 @@ public class Day15Test {
     }
 
     private int findNthNumber(String input, int n) {
-        final long before = System.nanoTime();
-        try {
-            return findNthNumber(parseStartingNumbers(input), n);
-        } finally {
-            log.info("Finished finding {}th number in {}ms", n, (System.nanoTime() - before) / 1000000.0);
-        }
+        return RecitationGame.findNthSpokenNumber(parseStartingNumbers(input), n);
     }
-
-    private int findNthNumber(List<Integer> startingNumbers, int n) {
-        final int[] previousTurns = new int[n + 1];
-        for (int i = 0; i < startingNumbers.size() - 1; i++) {
-            Integer number = startingNumbers.get(i);
-            previousTurns[number] = i + 1;
-        }
-        int lastNumberSpoken = startingNumbers.get(startingNumbers.size() - 1);
-        for (int turn = startingNumbers.size(); turn <= n; ++turn) {
-            if (turn == n) {
-                return lastNumberSpoken;
-            }
-            final int previousTurn = previousTurns[lastNumberSpoken];
-            previousTurns[lastNumberSpoken] = turn;
-            if (previousTurn == 0) {
-                lastNumberSpoken = 0;
-            } else {
-                lastNumberSpoken = turn - previousTurn;
-            }
-        }
-
-        return -1;
-    }
-
 }
