@@ -22,11 +22,21 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class PathGenerator implements Supplier<Position> {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final int dx;
     private final int dy;
     private final int maxX;
     private int x = 0;
     private int y = 0;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Supplier Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
 
     @Override
     public Position get() {

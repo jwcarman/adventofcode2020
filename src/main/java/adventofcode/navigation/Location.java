@@ -18,17 +18,33 @@ package adventofcode.navigation;
 
 public class Location {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private int x;
     private int y;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public static Location origin() {
+        return new Location(0, 0);
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public Location(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public static Location origin() {
-        return new Location(0, 0);
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Getters/Setters
+//----------------------------------------------------------------------------------------------------------------------
 
     public int getX() {
         return x;
@@ -38,30 +54,33 @@ public class Location {
         return y;
     }
 
-    void moveNorth(int value) {
-        translateBy(0, value);
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
-    void moveSouth(int value) {
-        translateBy(0, -value);
+    public int manhattanDistance() {
+        return Math.abs(x) + Math.abs(y);
     }
 
     void moveEast(int value) {
         translateBy(value, 0);
     }
 
-    void moveWest(int value) {
-        translateBy(-value, 0);
-    }
-
-    private void moveTo(int newX, int newY) {
-        this.x = newX;
-        this.y = newY;
+    void moveNorth(int value) {
+        translateBy(0, value);
     }
 
     void translateBy(int dx, int dy) {
         x += dx;
         y += dy;
+    }
+
+    void moveSouth(int value) {
+        translateBy(0, -value);
+    }
+
+    void moveWest(int value) {
+        translateBy(-value, 0);
     }
 
     void rotateLeft(int degrees) {
@@ -72,15 +91,16 @@ public class Location {
         }
     }
 
+    private void moveTo(int newX, int newY) {
+        this.x = newX;
+        this.y = newY;
+    }
+
     void rotateRight(int degrees) {
         switch (degrees) {
             case 90 -> moveTo(y, -x);
             case 180 -> moveTo(-x, -y);
             case 270 -> moveTo(-y, x);
         }
-    }
-
-    public int manhattanDistance() {
-        return Math.abs(x) + Math.abs(y);
     }
 }

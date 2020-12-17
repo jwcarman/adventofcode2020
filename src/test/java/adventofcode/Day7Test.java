@@ -28,6 +28,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day7Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day7.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -43,17 +47,9 @@ public class Day7Test {
 
     private static final String SHINY_GOLD = "shiny gold";
 
-    @Test
-    void part1() {
-        final LuggageNode node = shinyGoldNode(INPUT);
-        log.info("Part One: {}", node.countOuterParents());
-    }
-
-    @Test
-    void part2() {
-        final LuggageNode node = shinyGoldNode(INPUT);
-        log.info("Part Two: {}", node.countDescendants());
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -67,9 +63,21 @@ public class Day7Test {
         assertThat(node.countDescendants()).isEqualTo(32);
     }
 
+    @Test
+    void part1() {
+        final LuggageNode node = shinyGoldNode(INPUT);
+        log.info("Part One: {}", node.countOuterParents());
+    }
+
     private LuggageNode shinyGoldNode(String input) {
         final LuggageTree tree = new LuggageTree();
         Input.readLines(input).forEach(tree::addRule);
         return tree.getNode(SHINY_GOLD);
+    }
+
+    @Test
+    void part2() {
+        final LuggageNode node = shinyGoldNode(INPUT);
+        log.info("Part Two: {}", node.countDescendants());
     }
 }

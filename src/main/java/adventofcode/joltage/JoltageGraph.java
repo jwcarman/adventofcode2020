@@ -33,8 +33,16 @@ import static adventofcode.io.Input.readLines;
 
 public class JoltageGraph {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Graph<Integer, String> graph;
     private final int maximumJoltage;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public JoltageGraph(String input) {
         final List<Integer> joltages = parseJoltages(input);
@@ -48,6 +56,26 @@ public class JoltageGraph {
         joltages.add(joltages.get(joltages.size() - 1) + 3);
         return joltages;
     }
+
+    private Graph<Integer, String> buildGraph(List<Integer> joltages) {
+        final Graph<Integer, String> graph = new DirectedAcyclicGraph<>(String.class);
+        final int n = joltages.size();
+        for (int i = 0; i < n - 1; ++i) {
+            final int curr = joltages.get(i);
+            for (int j = i + 1; j < n && joltages.get(j) - curr < 4; ++j) {
+                final int next = joltages.get(j);
+                graph.addVertex(curr);
+                graph.addVertex(next);
+                final String edge = String.format("%d -> %d", curr, next);
+                graph.addEdge(curr, next, edge);
+            }
+        }
+        return graph;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public Map<Integer, Long> calculatePathCounts() {
         final Map<Integer, Long> pathCounts = new HashMap<>();
@@ -66,6 +94,17 @@ public class JoltageGraph {
         return pathCounts;
     }
 
+    private void addLeafPathCount(Map<Integer, Long> pathCounts, int joltage) {
+        pathCounts.put(joltage, 1L);
+    }
+
+    private void addNonLeafPathCount(Map<Integer, Long> pathCounts, int joltage) {
+        pathCounts.put(joltage, graph.outgoingEdgesOf(joltage).stream()
+                .map(graph::getEdgeTarget)
+                .mapToLong(pathCounts::get)
+                .sum());
+    }
+
     private void enqueue(Queue<Integer> joltageQueue, Set<Integer> queued, List<Integer> parents) {
         joltageQueue.addAll(parents);
         queued.addAll(parents);
@@ -77,32 +116,5 @@ public class JoltageGraph {
                 .filter(j -> !queued.contains(j))
                 .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
-    }
-
-    private void addNonLeafPathCount(Map<Integer, Long> pathCounts, int joltage) {
-        pathCounts.put(joltage, graph.outgoingEdgesOf(joltage).stream()
-                .map(graph::getEdgeTarget)
-                .mapToLong(pathCounts::get)
-                .sum());
-    }
-
-    private void addLeafPathCount(Map<Integer, Long> pathCounts, int joltage) {
-        pathCounts.put(joltage, 1L);
-    }
-
-    private Graph<Integer, String> buildGraph(List<Integer> joltages) {
-        final Graph<Integer, String> graph = new DirectedAcyclicGraph<>(String.class);
-        final int n = joltages.size();
-        for (int i = 0; i < n - 1; ++i) {
-            final int curr = joltages.get(i);
-            for (int j = i + 1; j < n && joltages.get(j) - curr < 4; ++j) {
-                final int next = joltages.get(j);
-                graph.addVertex(curr);
-                graph.addVertex(next);
-                final String edge = String.format("%d -> %d", curr, next);
-                graph.addEdge(curr, next, edge);
-            }
-        }
-        return graph;
     }
 }

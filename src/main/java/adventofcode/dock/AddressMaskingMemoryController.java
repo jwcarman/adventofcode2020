@@ -25,8 +25,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AddressMaskingMemoryController extends BaseMemoryController {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private Long orMask = 0L;
     private List<Long> xorMasks;
+
+//----------------------------------------------------------------------------------------------------------------------
+// MemoryController Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
 
     @Override
     public void setMask(String mask) {
@@ -56,6 +65,10 @@ public class AddressMaskingMemoryController extends BaseMemoryController {
             writeToAddress(xorMask ^ anded, value);
         }
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     private void appendToAddresses(List<String> addresses, char c) {
         for (int i = 0; i < addresses.size(); i++) {

@@ -33,21 +33,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day13Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day13.txt");
 
     private static final String EXAMPLE_INPUT = """
             939
             7,13,x,x,59,x,31,19""";
 
-    @Test
-    void part1() {
-        log.info("Part One: {}", calculateAnswerPart1(INPUT));
-    }
-
-    @Test
-    void part2() {
-        log.info("Part Two: {}", calculateAnswerPart2(INPUT));
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -57,6 +55,33 @@ public class Day13Test {
     @Test
     void example2() {
         assertThat(calculateAnswerPart2(EXAMPLE_INPUT)).isEqualTo(1068781);
+    }
+
+    @Test
+    void part1() {
+        log.info("Part One: {}", calculateAnswerPart1(INPUT));
+    }
+
+    private int calculateAnswerPart1(String input) {
+        final List<String> lines = readLines(input);
+        final int timestamp = Integer.parseInt(lines.get(0));
+        final List<Integer> busIds = Arrays.stream(lines.get(1).split(","))
+                .filter(s -> !"x".equals(s))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+        for (int i = timestamp; i < Integer.MAX_VALUE; ++i) {
+            for (Integer busId : busIds) {
+                if (i % busId == 0) {
+                    return (i - timestamp) * busId;
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", calculateAnswerPart2(INPUT));
     }
 
     private long calculateAnswerPart2(String input) {
@@ -81,22 +106,5 @@ public class Day13Test {
                 .map(i -> Indexed.index(i.getIndex(), Long.parseLong(i.getValue())))
                 .sorted(Comparator.comparingLong(Indexed::getValue))
                 .collect(Collectors.toList());
-    }
-
-    private int calculateAnswerPart1(String input) {
-        final List<String> lines = readLines(input);
-        final int timestamp = Integer.parseInt(lines.get(0));
-        final List<Integer> busIds = Arrays.stream(lines.get(1).split(","))
-                .filter(s -> !"x".equals(s))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
-        for (int i = timestamp; i < Integer.MAX_VALUE; ++i) {
-            for (Integer busId : busIds) {
-                if (i % busId == 0) {
-                    return (i - timestamp) * busId;
-                }
-            }
-        }
-        return -1;
     }
 }

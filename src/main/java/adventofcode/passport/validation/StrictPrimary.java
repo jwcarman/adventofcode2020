@@ -17,5 +17,4 @@
 package adventofcode.passport.validation;
 
 public interface StrictPrimary {
-
 }

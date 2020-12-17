@@ -22,8 +22,17 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BitSetSeatState implements SeatState {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final BitSet bits;
     private final int width;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public BitSetSeatState(int width, int height) {
         this.width = width;
@@ -33,6 +42,25 @@ public class BitSetSeatState implements SeatState {
     private BitSetSeatState(BitSet bits, int width) {
         this.bits = bits;
         this.width = width;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Canonical Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public SeatState clone() {
+        return new BitSetSeatState((BitSet) bits.clone(), width);
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// SeatState Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
+
+    @Override
+    public void empty(int row, int col) {
+        bits.clear(indexOf(row, col));
     }
 
     @Override
@@ -45,19 +73,11 @@ public class BitSetSeatState implements SeatState {
         bits.set(indexOf(row, col));
     }
 
-    @Override
-    public void empty(int row, int col) {
-        bits.clear(indexOf(row, col));
-    }
-
-    @Override
-    public SeatState clone() {
-        return new BitSetSeatState((BitSet) bits.clone(), width);
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     private int indexOf(int row, int col) {
         return row * width + col;
     }
-
-
 }

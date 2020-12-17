@@ -26,10 +26,18 @@ import static adventofcode.io.Input.readLines;
 
 public class SeatLayout {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final List<String> rows;
     private final int width;
     private final int height;
     private Table<Integer, Integer, Seat> table;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public SeatLayout(String input) {
         this.rows = readLines(input);
@@ -38,31 +46,14 @@ public class SeatLayout {
         this.table = HashBasedTable.create(height, width);
     }
 
-    public SeatState createInitialState() {
-        return new BitSetSeatState(width, height);
-    }
-
-    private Seat getOrCreateSeat(int row, int col) {
-        Seat seat = table.get(row, col);
-        if (seat == null) {
-            seat = new Seat(row, col);
-            table.put(row, col, seat);
-        }
-        return seat;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public List<Seat> createDirectNeighborSeats() {
         final List<Seat> seats = createUnlinkedSeats();
         for (Seat seat : seats) {
             seat.linkDirectNeighbors(table);
-        }
-        return seats;
-    }
-
-    public List<Seat> createVisibleNeighborSeats() {
-        final List<Seat> seats = createUnlinkedSeats();
-        for (Seat seat : seats) {
-            seat.linkVisibleNeighbors(table, height, width);
         }
         return seats;
     }
@@ -80,4 +71,24 @@ public class SeatLayout {
         return seats;
     }
 
+    private Seat getOrCreateSeat(int row, int col) {
+        Seat seat = table.get(row, col);
+        if (seat == null) {
+            seat = new Seat(row, col);
+            table.put(row, col, seat);
+        }
+        return seat;
+    }
+
+    public SeatState createInitialState() {
+        return new BitSetSeatState(width, height);
+    }
+
+    public List<Seat> createVisibleNeighborSeats() {
+        final List<Seat> seats = createUnlinkedSeats();
+        for (Seat seat : seats) {
+            seat.linkVisibleNeighbors(table, height, width);
+        }
+        return seats;
+    }
 }

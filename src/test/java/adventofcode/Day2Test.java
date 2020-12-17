@@ -31,6 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day2Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day2.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -38,17 +42,9 @@ public class Day2Test {
             1-3 b: cdefg
             2-9 c: ccccccccc""";
 
-    @Test
-    void part1() {
-        final long count = countLines(INPUT, PasswordPolicyLine::isValidPart1);
-        log.info("Part One: {}", count);
-    }
-
-    @Test
-    void part2() {
-        final long count = countLines(INPUT, PasswordPolicyLine::isValidPart2);
-        log.info("Part Two: {}", count);
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -62,12 +58,24 @@ public class Day2Test {
         assertThat(count).isEqualTo(1);
     }
 
+    @Test
+    void part1() {
+        final long count = countLines(INPUT, PasswordPolicyLine::isValidPart1);
+        log.info("Part One: {}", count);
+    }
+
     private long countLines(String input, Predicate<PasswordPolicyLine> predicate) {
         final List<String> lines = readLines(input);
         return lines.stream()
                 .map(this::toPolicyLine)
                 .filter(predicate)
                 .count();
+    }
+
+    @Test
+    void part2() {
+        final long count = countLines(INPUT, PasswordPolicyLine::isValidPart2);
+        log.info("Part Two: {}", count);
     }
 
     private PasswordPolicyLine toPolicyLine(String line) {
@@ -80,5 +88,4 @@ public class Day2Test {
                 .password(scanner.next())
                 .build();
     }
-
 }

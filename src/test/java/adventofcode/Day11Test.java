@@ -32,6 +32,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day11Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day11.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -46,17 +50,9 @@ public class Day11Test {
             L.LLLLLL.L
             L.LLLLL.LL""";
 
-    @Test
-    void part1() {
-        final long count = calculateAnswerPart1(INPUT);
-        log.info("Part One: {}", count);
-    }
-
-    @Test
-    void part2() {
-        final long count = calculateAnswerPart2(INPUT);
-        log.info("Part Two: {}", count);
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -68,6 +64,12 @@ public class Day11Test {
     void example2() {
         final long count = calculateAnswerPart2(EXAMPLE_INPUT);
         assertThat(count).isEqualTo(26);
+    }
+
+    @Test
+    void part1() {
+        final long count = calculateAnswerPart1(INPUT);
+        log.info("Part One: {}", count);
     }
 
     private long calculateAnswerPart1(String input) {
@@ -96,12 +98,6 @@ public class Day11Test {
         return modified;
     }
 
-    private long calculateAnswerPart2(String input) {
-        final SeatLayout layout = new SeatLayout(input);
-        final List<Seat> seats = layout.createVisibleNeighborSeats();
-        return calculateAnswer(layout.createInitialState(), seats, 5);
-    }
-
     private long countOccupied(List<Seat> seats, SeatState state) {
         long count = 0;
         for (Seat seat : seats) {
@@ -110,5 +106,17 @@ public class Day11Test {
             }
         }
         return count;
+    }
+
+    @Test
+    void part2() {
+        final long count = calculateAnswerPart2(INPUT);
+        log.info("Part Two: {}", count);
+    }
+
+    private long calculateAnswerPart2(String input) {
+        final SeatLayout layout = new SeatLayout(input);
+        final List<Seat> seats = layout.createVisibleNeighborSeats();
+        return calculateAnswer(layout.createInitialState(), seats, 5);
     }
 }

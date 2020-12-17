@@ -23,16 +23,30 @@ import org.apache.commons.lang3.StringUtils;
 
 abstract class BaseMemoryController implements MemoryController {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     protected static final int MASK_SIZE = 36;
 
     private final Map<Long, Long> memory = new HashMap<>();
+
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     protected static long parseBinary(CharSequence text) {
         return Long.parseUnsignedLong(text.toString(), 2);
     }
 
-    protected void writeToAddress(long address, long value) {
-        memory.put(address, value);
+//----------------------------------------------------------------------------------------------------------------------
+// MemoryController Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
+
+    @Override
+    public long readValue(long address) {
+        return memory.getOrDefault(address, 0L);
     }
 
     @Override
@@ -40,16 +54,19 @@ abstract class BaseMemoryController implements MemoryController {
         return memory.values().stream().mapToLong(i -> i).sum();
     }
 
-    @Override
-    public long readValue(long address) {
-        return memory.getOrDefault(address, 0L);
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    protected String binaryStringOf(long value) {
+        return StringUtils.leftPad(Long.toBinaryString(value), MASK_SIZE, '0');
     }
 
     protected String fillMask(char character) {
         return StringUtils.repeat(character, MASK_SIZE);
     }
 
-    protected String binaryStringOf(long value) {
-        return StringUtils.leftPad(Long.toBinaryString(value), MASK_SIZE, '0');
+    protected void writeToAddress(long address, long value) {
+        memory.put(address, value);
     }
 }

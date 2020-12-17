@@ -31,6 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day10Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day10.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -66,15 +70,9 @@ public class Day10Test {
             10
             3""";
 
-    @Test
-    void part1() {
-        log.info("Part One: {}", calculatePart1Answer(INPUT));
-    }
-
-    @Test
-    void part2() {
-        log.info("Part Two: {}", calculatePart2Answer(INPUT));
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -86,6 +84,11 @@ public class Day10Test {
         assertThat(calculatePart2Answer(EXAMPLE_INPUT)).isEqualTo(19208);
     }
 
+    @Test
+    void part1() {
+        log.info("Part One: {}", calculatePart1Answer(INPUT));
+    }
+
     private int calculatePart1Answer(String input) {
         final List<Integer> joltages = parseJoltages(input);
         final Multiset<Integer> differences = HashMultiset.create(joltages.size() - 1);
@@ -94,6 +97,11 @@ public class Day10Test {
             differences.add(joltages.get(i + 1) - joltages.get(i));
         }
         return differences.count(1) * differences.count(3);
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", calculatePart2Answer(INPUT));
     }
 
     private Long calculatePart2Answer(String input) {

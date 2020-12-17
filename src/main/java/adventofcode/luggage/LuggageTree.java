@@ -24,23 +24,17 @@ import java.util.regex.Pattern;
 
 public class LuggageTree {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final Pattern CHILD_PATTERN = Pattern.compile("(?<n>\\d+) (?<color>.+)");
 
     private final Map<String, LuggageNode> nodes = new HashMap<>();
 
-    public LuggageNode getNode(final String color) {
-        return nodes.computeIfAbsent(color, LuggageNode::new);
-    }
-
-    private String cleanRule(String original) {
-        return Optional.ofNullable(original)
-                .map(rule -> rule.replaceAll(" bags", ""))
-                .map(rule -> rule.replaceAll(" bag", ""))
-                .map(rule -> rule.replaceAll(" contain", ","))
-                .map(rule -> rule.replaceAll("\\.", ""))
-                .map(rule -> rule.replaceAll(", no other", ""))
-                .orElse("");
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public void addRule(String rule) {
         final String[] splits = cleanRule(rule).split(",");
@@ -55,5 +49,19 @@ public class LuggageTree {
                 parent.addChild(n, child);
             }
         }
+    }
+
+    public LuggageNode getNode(final String color) {
+        return nodes.computeIfAbsent(color, LuggageNode::new);
+    }
+
+    private String cleanRule(String original) {
+        return Optional.ofNullable(original)
+                .map(rule -> rule.replaceAll(" bags", ""))
+                .map(rule -> rule.replaceAll(" bag", ""))
+                .map(rule -> rule.replaceAll(" contain", ","))
+                .map(rule -> rule.replaceAll("\\.", ""))
+                .map(rule -> rule.replaceAll(", no other", ""))
+                .orElse("");
     }
 }

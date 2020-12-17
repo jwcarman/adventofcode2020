@@ -29,6 +29,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class Day12Test {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day12.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -38,15 +43,9 @@ public class Day12Test {
             R90
             F11""";
 
-    @Test
-    void part1() {
-        log.info("Part One: {}", calculateDistancePart1(INPUT));
-    }
-
-    @Test
-    void part2() {
-        log.info("Part Two: {}", calculateDistancePart2(INPUT));
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -58,6 +57,11 @@ public class Day12Test {
         assertThat(calculateDistancePart2(EXAMPLE_INPUT)).isEqualTo(286);
     }
 
+    @Test
+    void part1() {
+        log.info("Part One: {}", calculateDistancePart1(INPUT));
+    }
+
     private int calculateDistancePart1(String input) {
         final Location shipLocation = Location.origin();
         final Location waypointLocation = new Location(1, 0);
@@ -65,16 +69,21 @@ public class Day12Test {
         return calculateDistance(input, interpreter);
     }
 
+    private int calculateDistance(String input, NavigationInterpreter interpreter) {
+        final List<String> instructions = readLines(input);
+        instructions.forEach(interpreter::processInstruction);
+        return interpreter.getShipLocation().manhattanDistance();
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", calculateDistancePart2(INPUT));
+    }
+
     private int calculateDistancePart2(String input) {
         final Location shipLocation = Location.origin();
         final Location waypointLocation = new Location(10, 1);
         final NavigationInterpreter interpreter = new NavigationInterpreter(shipLocation, waypointLocation, waypointLocation);
         return calculateDistance(input, interpreter);
-    }
-
-    private int calculateDistance(String input, NavigationInterpreter interpreter) {
-        final List<String> instructions = readLines(input);
-        instructions.forEach(interpreter::processInstruction);
-        return interpreter.getShipLocation().manhattanDistance();
     }
 }

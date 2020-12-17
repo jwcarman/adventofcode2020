@@ -29,9 +29,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = HeightValidator.class)
 public @interface Height {
-    String message() default "Invalid height";
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     Class<?>[] groups() default {};
+
+    String message() default "Invalid height";
 
     Class<? extends Payload>[] payload() default {};
 }

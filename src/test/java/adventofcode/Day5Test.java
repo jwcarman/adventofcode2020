@@ -30,6 +30,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day5Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day5.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -37,21 +41,18 @@ public class Day5Test {
             FFFBBBFRRR
             BBFFBBFRLL""";
 
-    @Test
-    void part1() {
-        log.info("Part One: {}", findMaxSeatId(INPUT));
-    }
-
-    @Test
-    void part2() {
-        log.info("Part Two: {}", findMissingSeatId(INPUT));
-    }
-
-
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
         assertThat(findMaxSeatId(EXAMPLE_INPUT)).isEqualTo(820);
+    }
+
+    @Test
+    void part1() {
+        log.info("Part One: {}", findMaxSeatId(INPUT));
     }
 
     private int findMaxSeatId(String input) {
@@ -60,6 +61,11 @@ public class Day5Test {
                 .mapToInt(BoardingPass::calculateSeatId)
                 .max()
                 .orElse(-1);
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", findMissingSeatId(INPUT));
     }
 
     private Integer findMissingSeatId(String input) {
@@ -90,5 +96,4 @@ public class Day5Test {
     private int offsetOf(int index, List<Integer> numbers) {
         return numbers.get(index) - index;
     }
-
 }

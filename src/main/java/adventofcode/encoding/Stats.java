@@ -28,15 +28,44 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class Stats {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private long sum;
 
     private final Deque<Long> maximums = new LinkedList<>();
     private final Deque<Long> minimums = new LinkedList<>();
 
+//----------------------------------------------------------------------------------------------------------------------
+// Getters/Setters
+//----------------------------------------------------------------------------------------------------------------------
+
+    public long getSum() {
+        return sum;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     public void add(long x) {
         addToMaximums(x);
         addToMinimums(x);
         sum += x;
+    }
+
+    private void addToMaximums(long x) {
+        log.debug("Adding {} to maximums {}", x, maximums);
+        addLast(maximums, x, last -> last < x);
+        log.debug("Result  {}", maximums);
+    }
+
+    private void addToMinimums(long x) {
+        log.debug("Adding {} to minimums {}", x, minimums);
+        addLast(minimums, x, last -> last > x);
+        log.debug("Result  {}", minimums);
     }
 
     private void addLast(Deque<Long> deque, long x, Predicate<Long> condition) {
@@ -47,16 +76,12 @@ public class Stats {
         deque.addLast(x);
     }
 
-    private void addToMinimums(long x) {
-        log.debug("Adding {} to minimums {}", x, minimums);
-        addLast(minimums, x, last -> last > x);
-        log.debug("Result  {}", minimums);
+    public long getMax() {
+        return maximums.getFirst();
     }
 
-    private void addToMaximums(long x) {
-        log.debug("Adding {} to maximums {}", x, maximums);
-        addLast(maximums, x, last -> last < x);
-        log.debug("Result  {}", maximums);
+    public long getMin() {
+        return minimums.getFirst();
     }
 
     public void remove(long x) {
@@ -69,17 +94,5 @@ public class Stats {
         if (deque.getFirst() == x) {
             deque.removeFirst();
         }
-    }
-
-    public long getMax() {
-        return maximums.getFirst();
-    }
-
-    public long getMin() {
-        return minimums.getFirst();
-    }
-
-    public long getSum() {
-        return sum;
     }
 }

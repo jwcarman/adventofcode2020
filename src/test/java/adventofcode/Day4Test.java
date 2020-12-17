@@ -29,6 +29,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day4Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day4.txt");
 
     private static final String EXAMPLE_INPUT1 = """
@@ -74,17 +78,9 @@ public class Day4Test {
                         
             iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719""";
 
-    @Test
-    void part1() {
-        final long count = findPassports(INPUT, Passport::isValidPart1);
-        log.info("Part One: {}", count);
-    }
-
-    @Test
-    void part2() {
-        final long count = findPassports(INPUT, Passport::isValidPart2);
-        log.info("Part Two: {}", count);
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -96,9 +92,21 @@ public class Day4Test {
         assertThat(findPassports(EXAMPLE_INPUT2, Passport::isValidPart2)).isEqualTo(4);
     }
 
+    @Test
+    void part1() {
+        final long count = findPassports(INPUT, Passport::isValidPart1);
+        log.info("Part One: {}", count);
+    }
+
     private long findPassports(String input, Predicate<Passport> predicate) {
         return Passport.parseFromInput(Input.readLines(input)).stream()
                 .filter(predicate)
                 .count();
+    }
+
+    @Test
+    void part2() {
+        final long count = findPassports(INPUT, Passport::isValidPart2);
+        log.info("Part Two: {}", count);
     }
 }

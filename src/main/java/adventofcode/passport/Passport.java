@@ -43,12 +43,11 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class Passport {
 
-    private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
 
-    public static List<Passport> parseFromInput(List<String> lines) {
-        lines.add("");
-        return lines.stream().collect(LinkedList::new, new Accumulator(), List::addAll);
-    }
+    private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
     @NotNull
     @Min(value = 1920, groups = StrictPrimary.class)
@@ -84,16 +83,29 @@ public class Passport {
 
     private String cid;
 
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public static List<Passport> parseFromInput(List<String> lines) {
+        lines.add("");
+        return lines.stream().collect(LinkedList::new, new Accumulator(), List::addAll);
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     public boolean isValidPart1() {
         return isValid(Default.class);
     }
 
-    public boolean isValidPart2() {
-        return isValid(Part2Group.class);
-    }
-
     private boolean isValid(Class<?>... groups) {
         return VALIDATOR.validate(this, groups).isEmpty();
+    }
+
+    public boolean isValidPart2() {
+        return isValid(Part2Group.class);
     }
 
     private void setProperty(String name, String value) {
@@ -104,9 +116,22 @@ public class Passport {
         }
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Inner Classes
+//----------------------------------------------------------------------------------------------------------------------
+
     private static class Accumulator implements BiConsumer<List<Passport>, String> {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
         private Passport passport = new Passport();
+
+//----------------------------------------------------------------------------------------------------------------------
+// BiConsumer Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
 
         @Override
         public void accept(List<Passport> passports, String line) {
@@ -117,6 +142,10 @@ public class Passport {
                 copyPropertiesFromLine(passport, line);
             }
         }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
         private void copyPropertiesFromLine(Passport passport, String line) {
             for (String split : line.split("\\s+")) {

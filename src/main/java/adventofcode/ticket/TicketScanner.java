@@ -49,26 +49,6 @@ public class TicketScanner {
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public void scan(Ticket ticket) {
-        long ticketErrorRate = 0L;
-        final List<Set<TicketField>> matchingFieldsPerValue = new LinkedList<>();
-        for (Integer value : ticket.getFieldValues()) {
-            final Set<TicketField> matchingFields = findMatchingFields(value);
-            if (matchingFields.isEmpty()) {
-                ticketErrorRate += value;
-            } else {
-                matchingFieldsPerValue.add(matchingFields);
-            }
-        }
-        if (ticketErrorRate == 0L) {
-            for (int i = 0; i < matchingFieldsPerValue.size(); i++) {
-                updateEligibleFields(i, matchingFieldsPerValue.get(i));
-            }
-        } else {
-            errorRate += ticketErrorRate;
-        }
-    }
-
     public Map<String, Integer> extractFields(Ticket ticket) {
         final Map<Integer, TicketField> fieldMapping = calculateFieldMapping();
         return fieldMapping.entrySet().stream()
@@ -87,6 +67,26 @@ public class TicketScanner {
             }
         }
         return fieldMapping;
+    }
+
+    public void scan(Ticket ticket) {
+        long ticketErrorRate = 0L;
+        final List<Set<TicketField>> matchingFieldsPerValue = new LinkedList<>();
+        for (Integer value : ticket.getFieldValues()) {
+            final Set<TicketField> matchingFields = findMatchingFields(value);
+            if (matchingFields.isEmpty()) {
+                ticketErrorRate += value;
+            } else {
+                matchingFieldsPerValue.add(matchingFields);
+            }
+        }
+        if (ticketErrorRate == 0L) {
+            for (int i = 0; i < matchingFieldsPerValue.size(); i++) {
+                updateEligibleFields(i, matchingFieldsPerValue.get(i));
+            }
+        } else {
+            errorRate += ticketErrorRate;
+        }
     }
 
     private Set<TicketField> findMatchingFields(Integer value) {

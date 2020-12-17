@@ -17,11 +17,16 @@
 package adventofcode.dock;
 
 public interface MemoryController {
-    void setMask(String mask);
 
-    void writeValue(long address, long value);
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     long readValue(long address);
 
+    void setMask(String mask);
+
     long sumOfMemoryValues();
+
+    void writeValue(long address, long value);
 }

@@ -31,6 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day14Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day14.txt");
 
     private static final String EXAMPLE_INPUT1 = """
@@ -45,16 +49,9 @@ public class Day14Test {
             mask = 00000000000000000000000000000000X0XX
             mem[26] = 1""";
 
-
-    @Test
-    void part1() {
-        log.info("Part One: {}", calculateAnswerPart1(INPUT));
-    }
-
-    @Test
-    void part2() {
-        log.info("Part Two: {}", calculateAnswerPart2(INPUT));
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -66,12 +63,13 @@ public class Day14Test {
         assertThat(calculateAnswerPart2(EXAMPLE_INPUT2)).isEqualTo(208);
     }
 
-    private long calculateAnswerPart1(String input) {
-        return calculateAnswer(input, new ValueMaskingMemoryController());
+    @Test
+    void part1() {
+        log.info("Part One: {}", calculateAnswerPart1(INPUT));
     }
 
-    private long calculateAnswerPart2(String input) {
-        return calculateAnswer(input, new AddressMaskingMemoryController());
+    private long calculateAnswerPart1(String input) {
+        return calculateAnswer(input, new ValueMaskingMemoryController());
     }
 
     private long calculateAnswer(String input, MemoryController memoryController) {
@@ -87,5 +85,14 @@ public class Day14Test {
             }
         }
         return memoryController.sumOfMemoryValues();
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", calculateAnswerPart2(INPUT));
+    }
+
+    private long calculateAnswerPart2(String input) {
+        return calculateAnswer(input, new AddressMaskingMemoryController());
     }
 }

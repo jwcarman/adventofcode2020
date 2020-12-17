@@ -31,6 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day3Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day3.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -46,6 +50,20 @@ public class Day3Test {
             #...##....#
             .#..#...#.#""";
 
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    @Test
+    void example1() {
+        assertThat(countTrees(EXAMPLE_INPUT, 3, 1)).isEqualTo(7);
+    }
+
+    @Test
+    void example2() {
+        final long total = multiplySlopesPart2(EXAMPLE_INPUT);
+        assertThat(total).isEqualTo(336);
+    }
 
     private static long countTrees(String input, int dx, int dy) {
         return countTrees(readLines(input), dx, dy);
@@ -64,22 +82,6 @@ public class Day3Test {
         log.info("Part One: {}", countTrees(INPUT, 3, 1));
     }
 
-    @Test
-    void part2() {
-        log.info("Part Two: {}", multiplySlopesPart2(INPUT));
-    }
-
-    @Test
-    void example1() {
-        assertThat(countTrees(EXAMPLE_INPUT, 3, 1)).isEqualTo(7);
-    }
-
-    @Test
-    void example2() {
-        final long total = multiplySlopesPart2(EXAMPLE_INPUT);
-        assertThat(total).isEqualTo(336);
-    }
-
     private long multiplySlopesPart2(String input) {
         final List<String> lines = readLines(input);
         return countTrees(lines, 1, 1) *
@@ -87,5 +89,10 @@ public class Day3Test {
                 countTrees(lines, 5, 1) *
                 countTrees(lines, 7, 1) *
                 countTrees(lines, 1, 2);
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", multiplySlopesPart2(INPUT));
     }
 }

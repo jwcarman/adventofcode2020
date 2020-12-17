@@ -27,23 +27,30 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class PassengerGroup {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Multiset<Integer> answers = HashMultiset.create(26);
     private int size = 0;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public static List<PassengerGroup> parseFromInput(List<String> lines) {
         lines.add("");
         return lines.stream().collect(LinkedList::new, new Accumulator(), List::addAll);
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     public void addMemberAnswers(String memberAnswers) {
         memberAnswers.chars().forEach(answers::add);
         size++;
     }
-
-    public long calculateUniqueAnswers() {
-        return answers.elementSet().size();
-    }
-
 
     public long calculateUnanimousAnswers() {
         return answers.entrySet().stream()
@@ -51,9 +58,26 @@ public class PassengerGroup {
                 .count();
     }
 
+    public long calculateUniqueAnswers() {
+        return answers.elementSet().size();
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Inner Classes
+//----------------------------------------------------------------------------------------------------------------------
+
     private static class Accumulator implements BiConsumer<List<PassengerGroup>, String> {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
         private PassengerGroup currentGroup = new PassengerGroup();
+
+//----------------------------------------------------------------------------------------------------------------------
+// BiConsumer Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
 
         @Override
         public void accept(List<PassengerGroup> passengerGroups, String memberAnswers) {

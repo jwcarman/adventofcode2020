@@ -26,6 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day8Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day8.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -39,16 +43,9 @@ public class Day8Test {
             jmp -4
             acc +6""";
 
-
-    @Test
-    void part1() {
-        log.info("Part One: {}", BootCodeGraph.accumulateToCycle(INPUT));
-    }
-
-    @Test
-    void part2() {
-        log.info("Part Two: {}", BootCodeGraph.accumulatePathToTerminus(INPUT));
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -60,4 +57,13 @@ public class Day8Test {
         assertThat(BootCodeGraph.accumulatePathToTerminus(EXAMPLE_INPUT)).isEqualTo(8);
     }
 
+    @Test
+    void part1() {
+        log.info("Part One: {}", BootCodeGraph.accumulateToCycle(INPUT));
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", BootCodeGraph.accumulatePathToTerminus(INPUT));
+    }
 }

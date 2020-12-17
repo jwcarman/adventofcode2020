@@ -18,15 +18,35 @@ package adventofcode.navigation;
 
 public class NavigationInterpreter {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Location shipLocation;
     private final Location waypointLocation;
     private final Location directionalMoveTarget;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public NavigationInterpreter(Location shipLocation, Location waypointLocation, Location directionalMoveTarget) {
         this.shipLocation = shipLocation;
         this.waypointLocation = waypointLocation;
         this.directionalMoveTarget = directionalMoveTarget;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Getters/Setters
+//----------------------------------------------------------------------------------------------------------------------
+
+    public Location getShipLocation() {
+        return shipLocation;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public final void processInstruction(String instruction) {
         final char action = instruction.charAt(0);
@@ -40,10 +60,6 @@ public class NavigationInterpreter {
             case 'R' -> waypointLocation.rotateRight(value);
             default -> moveToWaypoint(value);
         }
-    }
-
-    public Location getShipLocation() {
-        return shipLocation;
     }
 
     protected void moveToWaypoint(int times) {

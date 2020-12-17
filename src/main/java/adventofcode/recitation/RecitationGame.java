@@ -19,6 +19,11 @@ package adventofcode.recitation;
 import java.util.List;
 
 public class RecitationGame {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     public static int findNthSpokenNumber(List<Integer> startingNumbers, int n) {
         final int[] previousTurns = new int[n + 1];
         for (int i = 0; i < startingNumbers.size() - 1; i++) {

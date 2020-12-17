@@ -31,6 +31,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day9Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     public static final int PREAMBLE_SIZE = 25;
     public static final int EXAMPLE_PREAMBLE_SIZE = 5;
     private static final String INPUT = readResource("Day9.txt");
@@ -55,6 +59,19 @@ public class Day9Test {
             277
             309
             576""";
+
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    private static Long findFirstInvalid(List<Long> numbers, int bufferSize) {
+        final NumberBuffer buffer = new NumberBuffer(numbers.subList(0, bufferSize));
+
+        return numbers.subList(bufferSize, numbers.size()).stream()
+                .filter(Predicate.not(buffer::isValid))
+                .findFirst()
+                .orElse(-1L);
+    }
 
     /**
      * Inspiration for this algorithm came
@@ -82,28 +99,13 @@ public class Day9Test {
         return -1L;
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     private static long findFirstInvalid(String input, int bufferSize) {
         final List<Long> numbers = readLines(input, Long::parseLong);
         return findFirstInvalid(numbers, bufferSize);
-    }
-
-    private static Long findFirstInvalid(List<Long> numbers, int bufferSize) {
-        final NumberBuffer buffer = new NumberBuffer(numbers.subList(0, bufferSize));
-
-        return numbers.subList(bufferSize, numbers.size()).stream()
-                .filter(Predicate.not(buffer::isValid))
-                .findFirst()
-                .orElse(-1L);
-    }
-
-    @Test
-    void part1() {
-        log.info("Part One: {}", findFirstInvalid(INPUT, PREAMBLE_SIZE));
-    }
-
-    @Test
-    void part2() {
-        log.info("Part Two: {}", findEncryptionWeakness(INPUT, PREAMBLE_SIZE));
     }
 
     @Test
@@ -112,8 +114,18 @@ public class Day9Test {
     }
 
     @Test
+    void part1() {
+        log.info("Part One: {}", findFirstInvalid(INPUT, PREAMBLE_SIZE));
+    }
+
+    @Test
     void example2() {
         assertThat(findEncryptionWeakness(EXAMPLE_INPUT, EXAMPLE_PREAMBLE_SIZE)).isEqualTo(62);
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", findEncryptionWeakness(INPUT, PREAMBLE_SIZE));
     }
 
     private long findEncryptionWeakness(String input, int bufferSize) {
@@ -122,5 +134,4 @@ public class Day9Test {
         final long invalidNumber = findFirstInvalid(input, bufferSize);
         return findEncryptionWeakness(numbers, invalidNumber);
     }
-
 }

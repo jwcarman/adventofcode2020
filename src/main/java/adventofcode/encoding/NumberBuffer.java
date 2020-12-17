@@ -24,13 +24,26 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
 public class NumberBuffer {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Queue<Long> buffer;
     private final Multiset<Long> set;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public NumberBuffer(List<Long> preamble) {
         this.buffer = new LinkedList<>(preamble);
         this.set = HashMultiset.create(preamble);
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public boolean isValid(long n) {
         final boolean valid = set.stream().anyMatch(i -> set.contains(n - i));

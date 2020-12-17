@@ -29,6 +29,10 @@ import static adventofcode.io.Input.readLines;
 
 public class BootCodeGraph {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     public static int accumulateToCycle(String input) {
         final Graph<Integer, BootCodeEdge> graph = buildStandardGraph(input);
         int vertex = 0;
@@ -43,22 +47,8 @@ public class BootCodeGraph {
         return accumulator;
     }
 
-    public static int accumulatePathToTerminus(String input) {
-        final Graph<Integer, BootCodeEdge> graph = buildMutationGraph(input);
-        final DijkstraShortestPath<Integer, BootCodeEdge> dijkstra = new DijkstraShortestPath<>(graph);
-        final int terminus = graph.vertexSet().size() - 1;
-        final GraphPath<Integer, BootCodeEdge> path = dijkstra.getPath(0, terminus);
-        return path.getEdgeList().stream()
-                .mapToInt(BootCodeEdge::getValue)
-                .sum();
-    }
-
     private static Graph<Integer, BootCodeEdge> buildStandardGraph(String input) {
         return buildGraph(input, new StandardEdgeGenerator());
-    }
-
-    private static Graph<Integer, BootCodeEdge> buildMutationGraph(String input) {
-        return buildGraph(input, new MutationEdgeGenerator());
     }
 
     private static Graph<Integer, BootCodeEdge> buildGraph(String input, EdgeGenerator generator) {
@@ -74,6 +64,20 @@ public class BootCodeGraph {
         return graph;
     }
 
+    public static int accumulatePathToTerminus(String input) {
+        final Graph<Integer, BootCodeEdge> graph = buildMutationGraph(input);
+        final DijkstraShortestPath<Integer, BootCodeEdge> dijkstra = new DijkstraShortestPath<>(graph);
+        final int terminus = graph.vertexSet().size() - 1;
+        final GraphPath<Integer, BootCodeEdge> path = dijkstra.getPath(0, terminus);
+        return path.getEdgeList().stream()
+                .mapToInt(BootCodeEdge::getValue)
+                .sum();
+    }
+
+    private static Graph<Integer, BootCodeEdge> buildMutationGraph(String input) {
+        return buildGraph(input, new MutationEdgeGenerator());
+    }
+
     public static void addEdge(Graph<Integer, BootCodeEdge> graph, String operation, int src, int dest, int value, boolean mutation) {
         graph.addVertex(src);
         graph.addVertex(dest);
@@ -87,12 +91,25 @@ public class BootCodeGraph {
         graph.setEdgeWeight(edge, mutation ? 1.0 : 0.0);
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Inner Classes
+//----------------------------------------------------------------------------------------------------------------------
 
     interface EdgeGenerator {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
         void addEdges(Graph<Integer, BootCodeEdge> graph, int src, String operation, int argument);
     }
 
     public static class MutationEdgeGenerator implements EdgeGenerator {
+
+//----------------------------------------------------------------------------------------------------------------------
+// EdgeGenerator Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
         @Override
         public void addEdges(Graph<Integer, BootCodeEdge> graph, int source, String operation, int argument) {
             switch (operation) {
@@ -110,6 +127,11 @@ public class BootCodeGraph {
     }
 
     public static class StandardEdgeGenerator implements EdgeGenerator {
+
+//----------------------------------------------------------------------------------------------------------------------
+// EdgeGenerator Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
 
         @Override
         public void addEdges(Graph<Integer, BootCodeEdge> graph, int source, String operation, int argument) {

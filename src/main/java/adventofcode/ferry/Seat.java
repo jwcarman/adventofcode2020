@@ -25,11 +25,19 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = {"row", "col"})
 public class Seat {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     public static final char EMPTY = 'L';
 
     private final int row;
     private final int col;
     private final List<Seat> neighbors;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     Seat(int row, int col) {
         this.row = row;
@@ -37,9 +45,17 @@ public class Seat {
         this.neighbors = new LinkedList<>();
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Getters/Setters
+//----------------------------------------------------------------------------------------------------------------------
+
     public List<Seat> getNeighbors() {
         return neighbors;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public boolean applyRules(SeatState oldState, SeatState newState, int maxNeighbors) {
         final long neighborCount = occupiedNeighborCount(oldState);
@@ -58,6 +74,16 @@ public class Seat {
         return false;
     }
 
+    private long occupiedNeighborCount(SeatState seatState) {
+        long count = 0;
+        for (Seat neighbor : neighbors) {
+            if (neighbor.isOccupied(seatState)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public boolean isOccupied(SeatState seatState) {
         return seatState.isOccupied(row, col);
     }
@@ -71,6 +97,12 @@ public class Seat {
         addNeighbor(table.get(row + 1, col - 1));
         addNeighbor(table.get(row + 1, col));
         addNeighbor(table.get(row + 1, col + 1));
+    }
+
+    private void addNeighbor(Seat neighbor) {
+        if (neighbor != null) {
+            neighbors.add(neighbor);
+        }
     }
 
     void linkVisibleNeighbors(Table<Integer, Integer, Seat> table, int height, int width) {
@@ -96,21 +128,5 @@ public class Seat {
             c += dCol;
         }
         return null;
-    }
-
-    private void addNeighbor(Seat neighbor) {
-        if (neighbor != null) {
-            neighbors.add(neighbor);
-        }
-    }
-
-    private long occupiedNeighborCount(SeatState seatState) {
-        long count = 0;
-        for (Seat neighbor : neighbors) {
-            if (neighbor.isOccupied(seatState)) {
-                count++;
-            }
-        }
-        return count;
     }
 }

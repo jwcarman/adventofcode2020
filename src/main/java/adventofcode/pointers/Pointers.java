@@ -26,6 +26,10 @@ import org.apache.commons.lang3.tuple.Triple;
 
 public class Pointers {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     /**
      * Performs the
      * <a href="https://www.geeksforgeeks.org/find-a-triplet-that-sum-to-a-given-value/">Three Pointers Technique</a>
@@ -45,18 +49,6 @@ public class Pointers {
         return Optional.empty();
     }
 
-    /**
-     * Performs the <a href="https://www.geeksforgeeks.org/two-pointers-technique/">Two Pointers Technique</a> to find
-     * a pair of numbers from the given sorted list that add up to a target sum.
-     *
-     * @param sorted    the sorted list of numbers
-     * @param targetSum the target sum
-     * @return an optional containing the pair of indices for the numbers
-     */
-    public static Optional<Pair<Integer, Integer>> twoPointers(List<Integer> sorted, int targetSum) {
-        return twoPointers(sorted, targetSum, 0, sorted.size() - 1);
-    }
-
     private static Optional<Pair<Integer, Integer>> twoPointers(List<Integer> numbers, int targetSum, int left, int right) {
         while (left != right) {
             final int sum = numbers.get(left) + numbers.get(right);
@@ -69,5 +61,17 @@ public class Pointers {
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     * Performs the <a href="https://www.geeksforgeeks.org/two-pointers-technique/">Two Pointers Technique</a> to find
+     * a pair of numbers from the given sorted list that add up to a target sum.
+     *
+     * @param sorted    the sorted list of numbers
+     * @param targetSum the target sum
+     * @return an optional containing the pair of indices for the numbers
+     */
+    public static Optional<Pair<Integer, Integer>> twoPointers(List<Integer> sorted, int targetSum) {
+        return twoPointers(sorted, targetSum, 0, sorted.size() - 1);
     }
 }

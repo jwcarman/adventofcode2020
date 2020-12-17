@@ -30,24 +30,33 @@ import lombok.RequiredArgsConstructor;
 @Data
 @EqualsAndHashCode(of = "color")
 public class LuggageNode {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final String color;
     private final Set<LuggageNode> parents = new HashSet<>();
     private final List<LuggageNode> children = new LinkedList<>();
     private boolean outer = false;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public void addChild(int n, LuggageNode child) {
         child.getParents().add(this);
         IntStream.range(0, n).forEach(ndx -> children.add(child));
     }
 
+    public int countDescendants() {
+        return children.size() + children.stream().mapToInt(LuggageNode::countDescendants).sum();
+    }
+
     public int countOuterParents() {
         final HashSet<LuggageNode> parents = new HashSet<>();
         collectOuterParents(this, parents);
         return parents.size();
-    }
-
-    public int countDescendants() {
-        return children.size() + children.stream().mapToInt(LuggageNode::countDescendants).sum();
     }
 
     private void collectOuterParents(LuggageNode node, Set<LuggageNode> parents) {

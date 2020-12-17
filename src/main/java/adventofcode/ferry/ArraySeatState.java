@@ -19,10 +19,19 @@ package adventofcode.ferry;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class ArraySeatState implements SeatState {
+
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     public static final int OCCUPIED = 1;
     public static final int EMPTY = 0;
     private final short[] occupied;
     private final int width;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public ArraySeatState(int width, int height) {
         this.occupied = new short[width * height];
@@ -34,19 +43,19 @@ public class ArraySeatState implements SeatState {
         this.width = width;
     }
 
-    @Override
-    public boolean isOccupied(int row, int col) {
-        return occupied[indexOf(row, col)] == OCCUPIED;
-    }
-
-    private int indexOf(int row, int col) {
-        return row * width + col;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Canonical Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void occupy(int row, int col) {
-        occupied[indexOf(row, col)] = OCCUPIED;
+    public SeatState clone() {
+        return new ArraySeatState(ArrayUtils.clone(occupied), width);
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// SeatState Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
 
     @Override
     public void empty(int row, int col) {
@@ -54,7 +63,20 @@ public class ArraySeatState implements SeatState {
     }
 
     @Override
-    public SeatState clone() {
-        return new ArraySeatState(ArrayUtils.clone(occupied), width);
+    public boolean isOccupied(int row, int col) {
+        return occupied[indexOf(row, col)] == OCCUPIED;
+    }
+
+    @Override
+    public void occupy(int row, int col) {
+        occupied[indexOf(row, col)] = OCCUPIED;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    private int indexOf(int row, int col) {
+        return row * width + col;
     }
 }

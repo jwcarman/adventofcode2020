@@ -32,6 +32,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day1Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day1.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -42,16 +46,9 @@ public class Day1Test {
             675
             1456""";
 
-
-    @Test
-    void part1() {
-        log.info("Part One: {}", twoPointersProduct(readLines(INPUT, Integer::parseInt)));
-    }
-
-    @Test
-    void part2() {
-        log.info("Part Two: {}", threePointersProduct(readLines(INPUT, Integer::parseInt)));
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -65,17 +62,27 @@ public class Day1Test {
         assertThat(threePointersProduct(unsorted)).isEqualTo(241861950);
     }
 
-    private Integer threePointersProduct(List<Integer> unsorted) {
-        final List<Integer> sorted = sort(unsorted);
-        return threePointers(sorted, 2020)
-                .map(triple -> sorted.get(triple.getLeft()) * sorted.get(triple.getMiddle()) * sorted.get(triple.getRight()))
-                .orElse(-1);
+    @Test
+    void part1() {
+        log.info("Part One: {}", twoPointersProduct(readLines(INPUT, Integer::parseInt)));
     }
 
     private Integer twoPointersProduct(List<Integer> unsorted) {
         final List<Integer> sorted = sort(unsorted);
         return twoPointers(sorted, 2020)
                 .map(pair -> sorted.get(pair.getLeft()) * sorted.get(pair.getRight()))
+                .orElse(-1);
+    }
+
+    @Test
+    void part2() {
+        log.info("Part Two: {}", threePointersProduct(readLines(INPUT, Integer::parseInt)));
+    }
+
+    private Integer threePointersProduct(List<Integer> unsorted) {
+        final List<Integer> sorted = sort(unsorted);
+        return threePointers(sorted, 2020)
+                .map(triple -> sorted.get(triple.getLeft()) * sorted.get(triple.getMiddle()) * sorted.get(triple.getRight()))
                 .orElse(-1);
     }
 

@@ -21,5 +21,4 @@ import javax.validation.groups.Default;
 
 @GroupSequence({Default.class, StrictPrimary.class, Strict.class})
 public interface Part2Group {
-
 }

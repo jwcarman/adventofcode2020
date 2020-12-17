@@ -30,20 +30,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day15Test {
 
-    private static final String INPUT = readResource("Day15.txt");
-    private static final String EXAMPLE_INPUT = "0,3,6";
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     public static final int PART_1_LIMIT = 2020;
     public static final int PART_2_LIMIT = 30000000;
 
-    @Test
-    void part1() {
-        log.info("Part One: {}", findNthNumber(INPUT, PART_1_LIMIT));
-    }
+    private static final String INPUT = readResource("Day15.txt");
+    private static final String EXAMPLE_INPUT = "0,3,6";
 
-    @Test
-    void part2() {
-        log.info("Part Two: {}", findNthNumber(INPUT, PART_2_LIMIT));
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     @Test
     void example1() {
@@ -55,13 +54,23 @@ public class Day15Test {
         assertThat(findNthNumber(EXAMPLE_INPUT, PART_2_LIMIT)).isEqualTo(175594);
     }
 
+    @Test
+    void part1() {
+        log.info("Part One: {}", findNthNumber(INPUT, PART_1_LIMIT));
+    }
+
+    private int findNthNumber(String input, int n) {
+        return RecitationGame.findNthSpokenNumber(parseStartingNumbers(input), n);
+    }
+
     private List<Integer> parseStartingNumbers(String input) {
         return Arrays.stream(input.split(","))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
     }
 
-    private int findNthNumber(String input, int n) {
-        return RecitationGame.findNthSpokenNumber(parseStartingNumbers(input), n);
+    @Test
+    void part2() {
+        log.info("Part Two: {}", findNthNumber(INPUT, PART_2_LIMIT));
     }
 }

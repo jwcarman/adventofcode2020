@@ -36,6 +36,10 @@ public class TicketNotes {
 
     List<Ticket> nearbyTickets;
 
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
     public TicketNotes(String input) {
         final String[] splits = input.split("your ticket:|nearby tickets:");
 

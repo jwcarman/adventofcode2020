@@ -29,6 +29,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class Day6Test {
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final String INPUT = readResource("Day6.txt");
 
     private static final String EXAMPLE_INPUT = """
@@ -47,6 +51,20 @@ public class Day6Test {
             a
                         
             b""";
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    @Test
+    void example1() {
+        assertThat(uniqueAnswersFromInput(EXAMPLE_INPUT)).isEqualTo(11);
+    }
+
+    @Test
+    void example2() {
+        assertThat(unanimousAnswersFromInput(EXAMPLE_INPUT)).isEqualTo(6);
+    }
 
     @Test
     void part1() {
@@ -70,15 +88,5 @@ public class Day6Test {
         return groups.stream()
                 .mapToLong(PassengerGroup::calculateUnanimousAnswers)
                 .sum();
-    }
-
-    @Test
-    void example1() {
-        assertThat(uniqueAnswersFromInput(EXAMPLE_INPUT)).isEqualTo(11);
-    }
-
-    @Test
-    void example2() {
-        assertThat(unanimousAnswersFromInput(EXAMPLE_INPUT)).isEqualTo(6);
     }
 }
