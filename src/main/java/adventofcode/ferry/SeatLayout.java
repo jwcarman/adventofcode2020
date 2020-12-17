@@ -33,7 +33,7 @@ public class SeatLayout {
     private final List<String> rows;
     private final int width;
     private final int height;
-    private Table<Integer, Integer, Seat> table;
+    private final Table<Integer, Integer, Seat> table;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors

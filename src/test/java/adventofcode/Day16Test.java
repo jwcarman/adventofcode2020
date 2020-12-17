@@ -110,10 +110,9 @@ public class Day16Test {
     private Long calculateAnswerPart2(String input) {
         final Map<String, Integer> extractedFields = extractTicketFields(input);
 
-        final Long product = extractedFields.entrySet().stream()
+        return extractedFields.entrySet().stream()
                 .filter(entry -> entry.getKey().startsWith("departure"))
                 .mapToLong(Map.Entry::getValue)
                 .reduce(1L, (a, b) -> a * b);
-        return product;
     }
 }
