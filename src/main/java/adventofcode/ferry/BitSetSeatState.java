@@ -49,7 +49,7 @@ public class BitSetSeatState implements SeatState {
 //----------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public SeatState clone() {
+    public SeatState copy() {
         return new BitSetSeatState((BitSet) bits.clone(), width);
     }
 

@@ -81,7 +81,7 @@ public class Day11Test {
     private long calculateAnswer(SeatState currentState, List<Seat> seats, int maxNeighbors) {
         Set<Seat> modifiable = new HashSet<>(seats);
         while (!modifiable.isEmpty()) {
-            SeatState nextState = currentState.clone();
+            SeatState nextState = currentState.copy();
             modifiable = applyRules(modifiable, currentState, nextState, maxNeighbors);
             currentState = nextState;
         }

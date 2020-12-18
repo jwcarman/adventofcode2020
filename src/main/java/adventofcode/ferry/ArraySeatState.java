@@ -48,7 +48,7 @@ public class ArraySeatState implements SeatState {
 //----------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public SeatState clone() {
+    public SeatState copy() {
         return new ArraySeatState(ArrayUtils.clone(occupied), width);
     }
 

@@ -40,13 +40,4 @@ public class Ticket {
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
     }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
-
-    public boolean isValid(List<TicketField> ticketFields) {
-        return fieldValues.stream()
-                .allMatch(value -> ticketFields.stream().anyMatch(ticketField -> ticketField.matches(value)));
-    }
 }
