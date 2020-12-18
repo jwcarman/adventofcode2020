@@ -23,6 +23,10 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Expression evaluator class inspired by
+ * <a href="https://www.geeksforgeeks.org/expression-evaluation/">Geeks for Geeks</a>.
+ */
 @RequiredArgsConstructor
 @Slf4j
 public class ExpressionEvaluator {
