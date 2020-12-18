@@ -64,7 +64,7 @@ public class ExpressionEvaluator {
     public long evaluate(String expression) {
         final LinkedList<Long> valueStack = new LinkedList<>();
         final LinkedList<String> operatorStack = new LinkedList<>();
-        Scanner scanner = new Scanner(cleanInput(expression));
+        final Scanner scanner = new Scanner(cleanInput(expression));
         while (scanner.hasNext()) {
             final String token = scanner.next();
             log.debug("Evaluating token: \"{}\"", token);
