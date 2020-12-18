@@ -24,8 +24,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Expression evaluator class inspired by
- * <a href="https://www.geeksforgeeks.org/expression-evaluation/">Geeks for Geeks</a>.
+ * Expression evaluator which uses
+ * <a href="https://en.wikipedia.org/wiki/Shunting-yard_algorithm#The_algorithm_in_detail">Dijkstra's Shunting-Yard</a>
+ * algorithm.
  */
 @RequiredArgsConstructor
 @Slf4j
