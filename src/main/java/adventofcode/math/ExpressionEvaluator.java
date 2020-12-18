@@ -64,7 +64,7 @@ public class ExpressionEvaluator {
     public long evaluate(String expression) {
         final LinkedList<Long> valueStack = new LinkedList<>();
         final LinkedList<String> operatorStack = new LinkedList<>();
-        final Scanner scanner = new Scanner(cleanInput(expression));
+        final Scanner scanner = new Scanner(cleanExpression(expression));
         while (scanner.hasNext()) {
             final String token = scanner.next();
             log.debug("Evaluating token: \"{}\"", token);
@@ -85,8 +85,10 @@ public class ExpressionEvaluator {
         return valueStack.removeFirst();
     }
 
-    private String cleanInput(String input) {
-        return input.replace(LEFT_PAREN, " ( ").replace(")", " ) ");
+    private String cleanExpression(String input) {
+        return input
+                .replace(LEFT_PAREN, spaced(LEFT_PAREN))
+                .replace(RIGHT_PAREN, spaced(RIGHT_PAREN));
     }
 
     private void onLeftParen(LinkedList<String> operatorStack, String token) {
@@ -107,6 +109,10 @@ public class ExpressionEvaluator {
             pushEvaluation(valueStack, operatorStack);
         }
         operatorStack.push(token);
+    }
+
+    private String spaced(String input) {
+        return " " + input + " ";
     }
 
     private void onNumber(LinkedList<Long> valueStack, String token) {
