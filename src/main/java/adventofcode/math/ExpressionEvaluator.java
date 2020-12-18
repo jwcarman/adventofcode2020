@@ -100,7 +100,9 @@ public class ExpressionEvaluator {
     }
 
     private void onOperator(LinkedList<Long> valueStack, LinkedList<String> operatorStack, String token) {
-        while (!operatorStack.isEmpty() && orderOfOperations.apply(operatorStack.getFirst()) >= orderOfOperations.apply(token)) {
+        while (!operatorStack.isEmpty() &&
+                !LEFT_PAREN.equals(operatorStack.getFirst()) &&
+                orderOfOperations.apply(operatorStack.getFirst()) >= orderOfOperations.apply(token)) {
             pushEvaluation(valueStack, operatorStack);
         }
         operatorStack.push(token);
