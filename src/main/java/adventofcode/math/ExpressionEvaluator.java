@@ -69,8 +69,8 @@ public class ExpressionEvaluator {
             final String token = scanner.next();
             log.debug("Evaluating token: \"{}\"", token);
             switch (token) {
-                case LEFT_PAREN -> onLeftParam(operatorStack, token);
-                case RIGHT_PAREN -> onRightParam(valueStack, operatorStack);
+                case LEFT_PAREN -> onLeftParen(operatorStack, token);
+                case RIGHT_PAREN -> onRightParen(valueStack, operatorStack);
                 case ADD, MULTIPLY -> onOperator(valueStack, operatorStack, token);
                 default -> onNumber(valueStack, token);
             }
@@ -89,11 +89,11 @@ public class ExpressionEvaluator {
         return input.replace(LEFT_PAREN, " ( ").replace(")", " ) ");
     }
 
-    private void onLeftParam(LinkedList<String> operatorStack, String token) {
+    private void onLeftParen(LinkedList<String> operatorStack, String token) {
         operatorStack.push(token);
     }
 
-    private void onRightParam(LinkedList<Long> valueStack, LinkedList<String> operatorStack) {
+    private void onRightParen(LinkedList<Long> valueStack, LinkedList<String> operatorStack) {
         while (!LEFT_PAREN.equals(operatorStack.getFirst())) {
             pushEvaluation(valueStack, operatorStack);
         }
