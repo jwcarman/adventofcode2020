@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import static adventofcode.io.Input.readLines;
 import static adventofcode.io.Input.readResource;
 import static adventofcode.math.ExpressionEvaluator.ADD;
-import static adventofcode.math.ExpressionEvaluator.LEFT_PAREN;
 import static adventofcode.math.ExpressionEvaluator.MULTIPLY;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,7 +51,6 @@ public class Day18Test {
     private Long evaluateExpressionPart1(String input) {
         return evaluateExpression(input, operator -> switch (operator) {
             case ADD, MULTIPLY -> 1;
-            case LEFT_PAREN -> 0;
             default -> -1;
         });
     }
@@ -66,7 +64,6 @@ public class Day18Test {
         return evaluateExpression(input, operator -> switch (operator) {
             case ADD -> 2;
             case MULTIPLY -> 1;
-            case LEFT_PAREN -> 0;
             default -> -1;
         });
     }
