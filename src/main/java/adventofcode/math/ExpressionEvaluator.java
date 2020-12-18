@@ -51,7 +51,11 @@ public class ExpressionEvaluator {
         final String operator = operatorStack.pop();
         final Long right = valueStack.pop();
         final Long left = valueStack.pop();
-        final long value = operator.equals(ADD) ? left + right : left * right;
+        final long value = switch (operator) {
+            case ADD -> left + right;
+            case MULTIPLY -> left * right;
+            default -> throw new UnsupportedOperationException("Operator " + operator + " not supported.");
+        };
         log.debug("Pushing {} {} {} = {}", left, operator, right, value);
         valueStack.push(value);
     }
