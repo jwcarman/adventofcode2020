@@ -16,13 +16,14 @@
 
 package adventofcode.grammar;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
+
+import static com.google.common.collect.Sets.cartesianProduct;
 
 class CykMatcher implements Matcher {
 
@@ -31,7 +32,7 @@ class CykMatcher implements Matcher {
 //----------------------------------------------------------------------------------------------------------------------
 
     private final String startState;
-    private final Multimap<String, String> table = HashMultimap.create();
+    private final SetMultimap<String, String> table = HashMultimap.create();
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
@@ -69,17 +70,13 @@ class CykMatcher implements Matcher {
     private void processSubstring(String substring) {
         for (int i = 1; i < substring.length(); ++i) {
             final String left = substring.substring(0, i);
-            final Collection<String> leftSymbols = table.get(left);
+            final Set<String> leftSymbols = table.get(left);
             final String right = substring.substring(i);
-            final Collection<String> rightSymbols = table.get(right);
-            final Set<String> symbols = new HashSet<>();
-            for (String leftSymbol : leftSymbols) {
-                for (String rightSymbol : rightSymbols) {
-                    final Collection<String> matches = table.get(leftSymbol + " " + rightSymbol);
-                    symbols.addAll(matches);
-                }
-            }
-            symbols.forEach(symbol -> table.put(substring, symbol));
+            final Set<String> rightSymbols = table.get(right);
+            cartesianProduct(leftSymbols, rightSymbols).stream()
+                    .map(s -> String.join(" ", s))
+                    .flatMap(rhs -> table.get(rhs).stream())
+                    .forEach(symbol -> table.put(substring, symbol));
         }
     }
 }
