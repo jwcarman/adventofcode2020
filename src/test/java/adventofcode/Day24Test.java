@@ -126,12 +126,12 @@ public class Day24Test {
     }
 
     private int countBlackTilesAround(Set<HexPoint> blackTiles, HexPoint tile) {
-        int numberOfBlackNeighbors = 0;
+        int count = 0;
         for (HexPoint neighbor : tile.neighborhood()) {
             if (blackTiles.contains(neighbor)) {
-                numberOfBlackNeighbors++;
+                count++;
             }
         }
-        return numberOfBlackNeighbors;
+        return count;
     }
 }
