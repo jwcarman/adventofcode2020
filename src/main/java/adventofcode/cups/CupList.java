@@ -16,20 +16,29 @@
 
 package adventofcode.cups;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CupList {
-    private final int[] successorOf;
 
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
+    private final int[] successorOf;
     private int head;
     private int tail;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public CupList(int size) {
         this.successorOf = new int[size + 1];
         this.head = -1;
         this.tail = -1;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public void add(int cup) {
         if (head == -1) {
@@ -41,7 +50,15 @@ public class CupList {
             successorOf[cup] = head;
             tail = cup;
         }
+    }
 
+    public int[] collectN(int n, int cup) {
+        final int[] cups = new int[n];
+        for (int i = 0; i < n; ++i) {
+            cups[i] = successorOf[cup];
+            cup = successorOf[cup];
+        }
+        return cups;
     }
 
     public int cycle() {
@@ -50,28 +67,9 @@ public class CupList {
         return tail;
     }
 
-    public List<Integer> takeN(int n) {
-        final List<Integer> cups = new ArrayList<>(n);
-        while (cups.size() < n) {
-            cups.add(head);
-            head = successorOf[head];
-            successorOf[tail] = head;
-        }
-        return cups;
-    }
-
-    public List<Integer> collectN(int n, int cup) {
-        final List<Integer> cups = new ArrayList<>(n);
-        while (cups.size() < n) {
-            cups.add(successorOf[cup]);
-            cup = successorOf[cup];
-        }
-        return cups;
-    }
-
-    public void insertAfter(int destination, List<Integer> cups) {
+    public void insertAfter(int destination, int[] cups) {
         int prev = destination;
-        for (Integer curr : cups) {
+        for (int curr : cups) {
             successorOf[curr] = successorOf[prev];
             successorOf[prev] = curr;
             if (tail == prev) {
@@ -81,5 +79,15 @@ public class CupList {
         }
     }
 
-
+    public int[] takeN(int n) {
+        final int[] cups = new int[n];
+        int curr = head;
+        for (int i = 0; i < n; ++i) {
+            cups[i] = curr;
+            curr = successorOf[curr];
+        }
+        head = curr;
+        successorOf[tail] = head;
+        return cups;
+    }
 }

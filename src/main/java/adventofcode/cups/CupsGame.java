@@ -18,6 +18,8 @@ package adventofcode.cups;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 public class CupsGame {
 
     private final CupList cups;
@@ -40,22 +42,22 @@ public class CupsGame {
         }
     }
 
-    public List<Integer> cupsAfter(int cup, int numberOfCups) {
+    public int[] cupsAfter(int cup, int numberOfCups) {
         return cups.collectN(numberOfCups, cup);
     }
 
     public void move() {
         final int currentCup = cups.cycle();
-        final List<Integer> removed = cups.takeN(3);
+        final int[] removed = cups.takeN(3);
         final int destination = findDestination(removed, currentCup);
         cups.insertAfter(destination, removed);
     }
 
-    private int findDestination(List<Integer> removed, int currentCup) {
+    private int findDestination(int[] removed, int currentCup) {
         int destination = currentCup;
         do {
             destination = destination == 1 ? n : destination - 1;
-        } while (removed.contains(destination));
+        } while (ArrayUtils.indexOf(removed, destination) != -1);
         return destination;
     }
 }

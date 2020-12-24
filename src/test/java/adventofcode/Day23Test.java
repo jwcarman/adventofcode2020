@@ -16,6 +16,7 @@
 
 package adventofcode;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -61,8 +62,8 @@ public class Day23Test {
         IntStream.range(0, 100).forEach(moveNumber -> {
             game.move();
         });
-        return game.cupsAfter(1, 8).stream()
-                .map(Object::toString)
+        return Arrays.stream(game.cupsAfter(1, 8))
+                .mapToObj(Integer::toString)
                 .collect(Collectors.joining());
     }
 
@@ -73,10 +74,10 @@ public class Day23Test {
 
     private long calculateAnswerPart2(String input) {
         final CupsGame game = new CupsGame(parseCups(input), 1000000);
-        IntStream.range(0, 10000000).forEach(moveNumber -> {
+        for (int i = 0; i < 10000000; ++i) {
             game.move();
-        });
-        return game.cupsAfter(1, 2).stream()
+        }
+        return Arrays.stream(game.cupsAfter(1, 2))
                 .mapToLong(i -> i)
                 .reduce(1, (a, b) -> a * b);
     }
