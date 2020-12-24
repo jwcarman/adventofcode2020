@@ -20,69 +20,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CupList {
-    private final CupListNode[] index;
-    private CupListNode head;
-    private CupListNode tail;
+    private final int[] successorOf;
+
+    private int head;
+    private int tail;
 
     public CupList(int size) {
-        this.index = new CupListNode[size + 1];
+        this.successorOf = new int[size + 1];
+        this.head = -1;
+        this.tail = -1;
     }
 
     public void add(int cup) {
-        final CupListNode node = getOrCreateNode(cup);
-        if (head == null) {
-            node.link(node);
-            head = node;
-            tail = node;
+        if (head == -1) {
+            head = cup;
+            tail = cup;
+            successorOf[cup] = cup;
         } else {
-            tail.link(node);
-            node.link(head);
-            tail = node;
+            successorOf[tail] = cup;
+            successorOf[cup] = head;
+            tail = cup;
         }
 
-    }
-
-    private CupListNode getOrCreateNode(int cup) {
-        CupListNode node = this.index[cup];
-        if (node == null) {
-            node = new CupListNode(cup);
-            this.index[cup] = node;
-        }
-        return node;
     }
 
     public int cycle() {
-        tail = tail.next();
-        head = head.next();
-        return tail.getCup();
+        head = successorOf[head];
+        tail = successorOf[tail];
+        return tail;
     }
 
     public List<Integer> takeN(int n) {
         final List<Integer> cups = new ArrayList<>(n);
         while (cups.size() < n) {
-            cups.add(head.getCup());
-            head = head.next();
-            tail.link(head);
+            cups.add(head);
+            head = successorOf[head];
+            successorOf[tail] = head;
         }
         return cups;
     }
 
     public List<Integer> collectN(int n, int cup) {
-        CupListNode node = getOrCreateNode(cup);
         final List<Integer> cups = new ArrayList<>(n);
         while (cups.size() < n) {
-            node = node.next();
-            cups.add(node.getCup());
+            cups.add(successorOf[cup]);
+            cup = successorOf[cup];
         }
         return cups;
     }
 
     public void insertAfter(int destination, List<Integer> cups) {
-        CupListNode prev = getOrCreateNode(destination);
-        for (Integer cup : cups) {
-            final CupListNode curr = getOrCreateNode(cup);
-            curr.link(prev.next());
-            prev.link(curr);
+        int prev = destination;
+        for (Integer curr : cups) {
+            successorOf[curr] = successorOf[prev];
+            successorOf[prev] = curr;
             if (tail == prev) {
                 tail = curr;
             }
