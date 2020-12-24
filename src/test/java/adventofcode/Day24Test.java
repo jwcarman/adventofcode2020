@@ -117,16 +117,21 @@ public class Day24Test {
     }
 
     private boolean shouldBeBlack(Set<HexPoint> blackTiles, HexPoint tile) {
+        final int blackTileCount = countBlackTilesAround(blackTiles, tile);
+        if (blackTiles.contains(tile)) {
+            return blackTileCount == 2 || blackTileCount == 3;
+        } else {
+            return blackTileCount == 2;
+        }
+    }
+
+    private int countBlackTilesAround(Set<HexPoint> blackTiles, HexPoint tile) {
         int numberOfBlackNeighbors = 0;
         for (HexPoint neighbor : tile.neighborhood()) {
             if (blackTiles.contains(neighbor)) {
                 numberOfBlackNeighbors++;
             }
         }
-        if (blackTiles.contains(tile)) {
-            return numberOfBlackNeighbors == 2 || numberOfBlackNeighbors == 3;
-        } else {
-            return numberOfBlackNeighbors == 2;
-        }
+        return numberOfBlackNeighbors;
     }
 }
